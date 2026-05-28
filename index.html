@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The San Julian St Trail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="theme-color" content="#070b07">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="San Julian St Trail">
+<meta name="description" content="Skid Row EMS training game \u2014 retro CRT survival expedition for EMTs.">
+<style>
+  :root{
+    --bg:#0f0c05;--screen:#2b2614;--green:#9cc07e;--green-dim:#8d8362;--green-deep:#594d2f;
+    --amber:#e0b85a;--amber-dim:#a08854;--red:#d96461;--ink:#faf5e6;
+    --body:'VT323','IBM Plex Mono','SF Mono',Menlo,Consolas,monospace;
+    --pixel:'Press Start 2P',monospace;
+    --crt:'VT323',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:radial-gradient(circle at top,rgba(217,192,142,.12) 0,rgba(14,11,6,.98) 52%),var(--bg);color:var(--ink);font-family:var(--body);font-size:24px;line-height:1.35;overflow-x:hidden;-webkit-font-smoothing:none;-moz-osx-font-smoothing:auto;text-rendering:optimizeLegibility}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0,rgba(255,255,255,.02) 1px,rgba(0,0,0,0) 2px);mix-blend-mode:screen}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:51;background:radial-gradient(ellipse at center,rgba(255,241,205,0) 45%,rgba(0,0,0,.45) 100%);animation:flicker 8s infinite}
+  @keyframes flicker{0%,100%{opacity:.9}48%{opacity:.8}50%{opacity:.95}52%{opacity:.82}}
+  .wrap{max-width:780px;margin:0 auto;padding:24px 18px 60px;min-height:100%;position:relative;z-index:2}
+  .screen{border:3px solid var(--amber-dim);background:linear-gradient(180deg,var(--screen),#1c1710);box-shadow:0 0 0 4px rgba(141,124,74,.35),inset 0 0 18px rgba(255,235,179,.08);padding:24px 24px 28px;position:relative;color:var(--ink)}
+  .screen::before{content:"";position:absolute;top:6px;left:6px;right:6px;bottom:6px;border:1px solid var(--green-deep);pointer-events:none}
+  h1{font-family:var(--pixel);line-height:1.5;font-size:26px;color:var(--amber);text-align:center;text-shadow:0 0 6px rgba(255,223,137,.35);margin:6px 0 4px;letter-spacing:1px}
+  h2,h3{font-family:var(--body);font-weight:700;line-height:1.4;letter-spacing:.5px}
+  .pix{font-family:var(--pixel)}
+  .sub{font-family:var(--body);font-size:19px;color:var(--amber-dim);text-align:center;margin-bottom:18px;letter-spacing:1px}
+  .rig{white-space:pre;font-family:var(--crt);font-size:18px;line-height:1.05;color:var(--amber-dim);text-align:center;margin:14px 0}
+  p{margin:0 0 12px;font-size:23px}
+  .scene{border-left:3px solid var(--amber-dim);padding-left:14px;margin:8px 0 18px;color:var(--ink);font-size:23px;line-height:1.35}
+  .scene .who{color:var(--amber);font-family:var(--body);font-size:19px;display:block;margin-bottom:6px;letter-spacing:1.5px;text-transform:uppercase}
+  .blink{animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  button{font-family:var(--body);font-size:22px;cursor:pointer;color:var(--ink);background:#2d291b;border:2px solid var(--amber-dim);width:100%;text-align:left;padding:12px 14px;margin:7px 0;transition:all .15s ease;line-height:1.2}
+  button:hover,button:focus{background:#3c361f;color:var(--ink);border-color:var(--amber);outline:none;box-shadow:0 0 10px rgba(210,167,75,.28)}
+  button .key{color:var(--amber);font-family:var(--pixel);font-size:11px;margin-right:8px;letter-spacing:1px}
+  button:hover .key,button:focus .key{color:var(--ink)}
+  button:disabled{opacity:.35;cursor:not-allowed}
+  button:disabled:hover{background:#2d291b;color:var(--ink);box-shadow:none}
+  button.select-card{background:#312c1b;border-color:#907641}
+  button.select-card:hover,button.select-card:focus{background:#3a341f;border-color:#b69f5a;box-shadow:0 0 8px rgba(182,159,90,.25)}
+  button.select-card .key{color:var(--amber)}
+  .center{text-align:center}
+  .start-btn{display:inline-block;width:auto;font-family:var(--pixel);font-size:14px;padding:16px 26px;margin-top:20px;letter-spacing:1px;line-height:1.4}
+  .hud{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;font-family:var(--body);font-size:19px;color:var(--amber);border:1px dashed var(--amber-dim);padding:8px 10px;margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;line-height:1.25}
+  .hud b{color:var(--green)}
+  .supplies{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;font-family:var(--body);font-size:18px;color:var(--green-dim);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;line-height:1.25}
+  .supplies b{color:var(--green)} .supplies .out{color:#a25555}
+  .good{color:var(--green)} .bad{color:var(--red)} .mid{color:var(--amber)}
+  .teach{border:2px solid var(--amber);background:rgba(255,194,75,.07);padding:12px 14px;margin:14px 0 8px;color:var(--amber);font-size:21px;line-height:1.35}
+  .teach .lbl{font-family:var(--body);font-size:19px;display:block;margin-bottom:6px;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber)}
+  .banner{border:2px solid var(--green-dim);padding:9px 12px;margin-bottom:14px;font-size:21px;line-height:1.3}
+  .banner.b-bad{border-color:var(--red)} .banner.b-mid{border-color:var(--amber)}
+  .proc-tag{font-family:var(--body);font-size:19px;color:var(--amber);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase}
+  .store-item{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px dotted var(--green-deep);padding:8px 2px;font-size:21px;line-height:1.3}
+  .store-item .nm{flex:1} .store-item .pr{color:var(--amber);font-family:var(--body);font-size:20px;white-space:nowrap;letter-spacing:1px}
+  .store-item button{width:auto;margin:0;padding:5px 12px;font-size:19px}
+  .owned{color:var(--green-dim)}
+  .tag{font-family:var(--body);font-size:16px;border:1px solid var(--green-dim);padding:2px 6px;color:var(--green-dim);margin-left:6px;letter-spacing:1px;text-transform:uppercase}
+  .barwrap{height:14px;border:1px solid var(--green-dim);margin:12px 0 4px;background:#04140a}
+  .bar{height:100%;background:var(--green);box-shadow:0 0 8px rgba(156,192,126,.6);transition:width .4s}
+  .small{font-size:19px;color:var(--green-dim);line-height:1.3}
+  hr{border:none;border-top:1px dashed var(--green-deep);margin:16px 0}
+  .fadein{animation:fade .3s ease both}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  @media(max-width:480px){body{font-size:21px}h1{font-size:20px}.wrap{padding:14px 8px 50px}.screen{padding:16px 14px 20px}.rig{font-size:14px}.hud{font-size:17px}.supplies{font-size:16px}.start-btn{font-size:12px;padding:14px 18px}p{font-size:21px}.scene{font-size:21px}.teach{font-size:19px}.banner{font-size:19px}}
+  /* logo */
+  .logo-rig{display:block;margin:6px auto 14px;width:92%;max-width:360px;height:auto;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(201,78,75,.35))}
+  .logo-rig .lb-l{animation:lbFlash .42s steps(1) infinite}
+  .logo-rig .lb-r{animation:lbFlash .42s steps(1) infinite;animation-delay:.21s}
+  .logo-rig .lb-c{animation:lbDim .84s steps(1) infinite}
+  .logo-rig .side-fr{animation:lbFlash .5s steps(1) infinite;animation-delay:.1s}
+  .logo-rig .side-rr{animation:lbFlash .5s steps(1) infinite;animation-delay:.35s}
+  .logo-rig .head-l,.logo-rig .head-r{animation:lbDim 1.6s steps(1) infinite}
+  @keyframes lbFlash{0%,49%{opacity:1}50%,100%{opacity:.12}}
+  @keyframes lbDim{0%,69%{opacity:1}70%,100%{opacity:.55}}
+  /* boot screen */
+  .boot{font-family:'VT323',monospace;font-size:20px;color:var(--green);min-height:360px;padding:6px 2px}
+  .boot-head{font-family:'Press Start 2P';font-size:10px;color:var(--green);letter-spacing:1px;text-align:center;margin-bottom:6px;text-shadow:0 0 4px rgba(143,165,111,.6)}
+  .boot-rule{border-top:1px dashed var(--green-deep);margin:8px 0 10px}
+  .boot-out{white-space:pre;text-align:left;padding:4px 8px;min-height:210px;color:var(--green);text-shadow:0 0 3px rgba(143,165,111,.55);line-height:1.25;font-size:19px}
+  .boot-out .ok{color:var(--green)}
+  .boot-out .warn{color:var(--amber)}
+  .boot-out .bad{color:var(--red)}
+  .boot-bar{height:14px;border:1px solid var(--green-dim);background:#04140a;margin:10px 8px 4px;position:relative;overflow:hidden}
+  .boot-bar-fill{height:100%;width:0;background:var(--green);box-shadow:0 0 10px rgba(143,165,111,.6);transition:width .25s ease}
+  .boot-bar-pct{font-family:'Press Start 2P';font-size:9px;color:var(--green);text-align:right;padding:0 10px;letter-spacing:1px}
+  .boot-skip{text-align:center;color:var(--green-deep);margin-top:18px;font-family:'Press Start 2P';font-size:8px;letter-spacing:2px}
+  .boot-cursor{animation:blink 1s steps(1) infinite}
+  /* RUSH TIMER (Tiller Killer "Drill First, Treat Second") */
+  .rush-bar{display:flex;align-items:center;gap:10px;font-family:var(--body);font-size:18px;color:var(--red);background:#1a0c08;border:2px solid var(--red);padding:6px 12px;margin:0 0 12px;letter-spacing:2px;text-transform:uppercase;animation:rushPulse .55s ease-in-out infinite alternate}
+  .rush-bar .lbl{flex:1}
+  .rush-bar .num{font-size:24px;color:var(--ink);font-weight:bold;min-width:50px;text-align:right}
+  .rush-bar.warn{border-color:var(--amber);color:var(--amber);background:#1a1408}
+  .rush-bar.warn .num{color:var(--amber)}
+  @keyframes rushPulse{from{box-shadow:0 0 0 rgba(217,100,97,.3)}to{box-shadow:0 0 16px rgba(217,100,97,.9)}}
+  /* NAV BAR (back / home) */
+  .nav-bar{display:flex;gap:10px;justify-content:flex-end;margin-bottom:8px;align-items:center}
+  .nav-btn{background:#2d291b;border:2px solid var(--amber-dim);color:var(--ink);padding:6px 14px;font-family:var(--body);font-size:18px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;width:auto;line-height:1.2;transition:all .15s ease}
+  .nav-btn:hover,.nav-btn:focus{border-color:var(--amber);background:#3c361f;outline:none;box-shadow:0 0 8px rgba(210,167,75,.25)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="nav" class="nav-bar" style="display:none">
+  <button id="back-btn" class="nav-btn" onclick="navBack()" style="display:none">← BACK</button>
+  <button id="home-btn" class="nav-btn" onclick="navHome()" style="display:none">⌂ HOME</button>
+</div>
+<div class="screen" id="app"></div>
+<p class="center small" style="margin-top:14px">a BLS training tool &middot; based on LA County EMS protocols</p>
+<p class="center small" style="margin-top:10px;color:var(--amber-dim);font-size:13px;letter-spacing:1px">&copy; 2026 FIRE FUELED EDUCATION LLC &middot; ALL RIGHTS RESERVED</p></div>
+<script>
+/* ===================== CLASSES ===================== */
+const CLASSES = {
+  captain:{name:"Captain Clipboard",role:"The Captain",aka:"Bugle Bob \u00b7 Captain Standby",
+    flavor:"Twenty years on. Coffee in one hand, EPCR in the other \u2014 neither has ever harmed a patient.",
+    budget:440,mult:1.0,
+    good:["Scene Command \u2014 de-escalates any patient by being slightly more bored than they are. It works.","Mood On The Engine \u2014 every clean call earns a morale \u2605 (max 5). Each star = bonus progress on your next save. Botch one and the crew takes a star back \u2014 they hold grudges."],
+    bad:"Skill Atrophy \u2014 hasn't laid hands on a patient since flip phones. Solo skills run on vibes and a 1998 EMT textbook.",
+    flags:{command:true,airwayRusty:true,morale:true}},
+  engineer:{name:"Pump Panel Pete",role:"The Engineer",aka:"Gauge Gary \u00b7 Wagon Babysitter",
+    flavor:"Knows every gauge on the rig and not one normal vital sign. Hasn't left the apparatus in a decade.",
+    budget:400,mult:1.5,
+    good:["Gearhead \u2014 diesel whisperer. Road hazards and rig breakdowns evaporate before the maxis are set.","Tank Water \u2014 500 gallons aboard and zero hesitation. Contamination scenes go from biohazard to puddle in 30 seconds (your boots too)."],
+    bad:"Apparatus Reflex \u2014 call gets serious? Pete returns from the rig with chock blocks, box lights, wet water, or AFFF. None of it is medicine.",
+    flags:{fixer:true,improv:true}},
+  ao:{name:"Tiller Killer",role:"The Apparatus Operator",aka:"Saw-Happy Sam \u00b7 Curb-Check Carl",
+    flavor:"Truckie to the bone — nothing a chainsaw or ladder can't fix. The curbs have opinions.",
+    budget:380,mult:2.0,
+    good:["Knows Every Alley \u2014 always picks the shortest route. You finish faster with fewer stops home.","No Key, No Problem \u2014 there's always a way in. Always."],
+    bad:"Drill First, Treat Second \u2014 ladders before patients. Every question gets a 15-second timer \u2014 miss it, your patient doesn't make it home.",
+    flags:{fixer:true,shortDist:true,rushed:true}},
+  driver:{name:"Diesel Bolus Dave",role:"EMT \u2014 The Driver",aka:"Sirens McQueen \u00b7 Code 3 Carl",
+    flavor:"Believes the strongest drug on the rig is the gas pedal. His treatment plan is 'I know a shortcut.'",
+    budget:360,mult:2.5,
+    good:["A Code 3 to the Hospital \u2014 siren up, foot down. What takes other crews 8 minutes takes Dave 2. (+bonus on time-critical calls)","Knows The Shortcut Back \u2014 quick transport to the hospital and you're back on your beat. Required transports don't reset your distance home."],
+    bad:"Half-Ass Assessment \u2014 Dave skips half the workup. Loses you points on every call, but no patient ever dies on his rig \u2014 he just hauls them to the ED.",
+    flags:{fast:true,halfAss:true}},
+  attendant:{name:"Stay-and-Play Ray",role:"EMT \u2014 The Attendant",aka:"Band-Aid Barry \u00b7 Vitals Vinny",
+    flavor:"The real medicine happens back here, and he loves it a little too much.",
+    budget:330,mult:3.0,
+    good:["By The Book \u2014 +bonus on every clean skill (you nail procedures).","Calm Hands \u2014 no fumbling under pressure."],
+    bad:"Geological Scene Time \u2014 Ray does every assessment himself. Each skill burns a morale \u2605 (rig sits idle). Snap-clear calls rebuild it. Hit zero and dispatch piles on.",
+    flags:{byBook:true,sceneTime:true,morale:true}}
+};
+
+/* ===================== STORE (cheap budget) ===================== */
+const STORE=[
+  {id:"opa",nm:"OPA Kit (full size range) \u2014 +2",pr:70,give:{opa:2}},
+  {id:"npa",nm:"NPA Kit (full size range) \u2014 +2",pr:70,give:{npa:2}},
+  {id:"lube",nm:"Surgi-Lube \u2014 +2",pr:25,give:{lube:2}},
+  {id:"naloxone",nm:"Naloxone / Narcan \u2014 +2",pr:90,give:{naloxone:2}},
+  {id:"bvm",nm:"BVM + Oxygen",pr:80,give:{bvm:true}},
+  {id:"glucometer",nm:"Glucometer",pr:90,give:{glucometer:true}},
+  {id:"strips",nm:"Strips & Lancets \u2014 +3",pr:40,give:{strips:3}},
+  {id:"batteries",nm:"Spare Batteries",pr:20,give:{batteries:true}},
+  {id:"glucose",nm:"Oral Glucose \u2014 +2",pr:30,give:{glucose:2}},
+  {id:"gloves",nm:"Gloves & PPE \u2014 +3",pr:20,give:{gloves:3}}
+];
+const COUNTS=["opa","npa","lube","naloxone","strips","glucose","gloves","epi"];
+const BOOLS=["bvm","glucometer","batteries"];
+
+/* ===================== ROUTES ===================== */
+/* Lincoln Heights (140 N Ave 19) → quarters (430 E 7th St) */
+const ROUTES={
+  main:{key:'main',name:"DOWN MAIN  ·  FAST + LOADED",sub:"N. Broadway → S. Main · ≈4.8 mi",
+    desc:"Shortest path. Dense patient contact. Maximum transports.",
+    good:["FAST — most calls per stop, fewest stops to quarters","HIGH SCORE CEILING — more chances to bank big saves"],
+    bad:"MOST TRANSPORTS — every transport sends non-Dave classes back to the hospital for a fresh route home. HEAVY Skid Row barriers & filth near quarters.",
+    mods:{scav:1.0,road:0.9,crew:1.0,filth:1.2,barrier:1.3,empty:0.5,transport:1.5}},
+  alameda:{key:'alameda',name:"MISSION & ALAMEDA  ·  BALANCED",sub:"Mission Rd → Alameda → W on 7th · ≈5.2 mi",
+    desc:"Middle ground. Steady mix of everything. Moderate transport load.",
+    good:["BALANCED — no single event type dominates","FORGIVING — best route to learn the game on"],
+    bad:"NO SPECIALTY — average across the board, no edge in any category.",
+    mods:{scav:1.0,road:1.0,crew:1.0,filth:1.0,barrier:1.0,empty:1.0,transport:1.0}},
+  freeway:{key:'freeway',name:"AROUND THE 5  ·  SLOW + SAFE",sub:"I-5 S → 4th St Bridge → W via Boyle Heights · ≈6.5 mi",
+    desc:"Long freeway loop. Few patients. Few transports.",
+    good:["FEWEST TRANSPORTS — non-Dave classes rarely get sent back to the hospital","SAFE — fewest barriers, filth events, hostile scenes"],
+    bad:"SLOWEST — half your stops are empty miles. LOW SCORE CEILING — fewer saves to bank.",
+    mods:{scav:1.2,road:1.4,crew:0.6,filth:0.5,barrier:0.4,empty:2.5,transport:0.5}}
+};
+/* uneventful / "empty trail" stops — mostly on the freeway route */
+const EMPTY=[
+  {title:"QUIET BLOCK",who:"THE TRAIL",scene:"A couple of miles of nothing. Sun on the windshield, diesel hum. Dispatch is on someone else's frequency for a change."},
+  {title:"RED-LIGHT MEDITATION",who:"THE TRAIL",scene:"Three reds in a row. Long enough to drink coffee, short enough not to nap. The city scrolls by."},
+  {title:"OPEN AIR",who:"THE 5",scene:"Freeway moves. You watch the river slide past on the right and the skyline rise on the left. Nobody bleeding, nobody yelling."},
+  {title:"WAVE FROM A BLACK & WHITE",who:"THE TRAIL",scene:"A cruiser rolls past in the other direction, the officer raises two fingers off the wheel. You raise two back. That's the whole exchange."},
+  {title:"GREEN WAVE",who:"THE TRAIL",scene:"Five greens in a row. Statistically improbable. You take it as a gift and don't ask questions."}
+];
+
+/* ===================== SKILL PROCEDURES ===================== */
+const PROC={
+  opa:{name:"OROPHARYNGEAL AIRWAY",steps:[
+    {q:"Before anything goes in the mouth, confirm:",qV:["Before anything goes in the mouth, confirm:","First check before insertion:","Indication check \u2014 is the OPA actually appropriate?"],teach:"An OPA is only for an UNRESPONSIVE patient with NO gag reflex. A gag = stop, it'll make them vomit.",
+      o:[{l:"He's unresponsive with NO gag reflex.",ok:1},{l:"Eh, he looks pretty out of it.",ok:0},{l:"Lube it up first.",ok:0}]},
+    {q:"Size it. Measure from:",qV:["Size it. Measure from:","How do you measure the OPA?","Pick the right size \u2014 your landmark is:"],teach:"Correct OPA size = corner of the mouth to the angle of the jaw (or earlobe). Too big = presses the epiglottis; too small = folds the tongue back.",
+      o:[{l:"Corner of the mouth \u2192 angle of the jaw.",ok:1},{l:"Front teeth \u2192 the chin.",ok:0},{l:"Eyeball it, he's a big guy.",ok:0}]},
+    {q:"Open the mouth to place it:",qV:["Open the mouth to place it:","Position step before insertion:","How do you get the mouth open?"],teach:"Open the mouth with a scissor (cross-finger) technique on the teeth, OR apply pressure on the chin with your thumb. NEVER force past clenched teeth \u2014 that's an absolute OPA contraindication.",
+      o:[{l:"Scissor (cross-finger) technique or chin-down with the thumb.",ok:1},{l:"Pry the clenched teeth open and shove it through.",ok:0},{l:"Wait for the medic to do it.",ok:0}]},
+    {q:"Insert it (adult technique):",qV:["Insert it (adult technique):","Adult insertion technique:","How does it actually go in for an adult?"],teach:"Hold upside-down in your non-dominant hand. Insert with the tip toward the hard palate, then rotate 180\u00b0 past the soft palate. (Alt: straight in displacing the tongue with a tongue blade, or sideways then rotate 90\u00b0.) Advance until the flange rests on the lips/teeth.",
+      o:[{l:"Upside-down, rotate 180\u00b0 past the soft palate, flange to the lips.",ok:1},{l:"Straight in, follow the tongue, no tool.",ok:.5},{l:"Force it sideways and hope.",ok:0}]}
+  ],rayExtra:[
+    {q:"Ray insists you also:",qV:["Ray insists you also:","Before placement, Ray adds:","Ray's not done \u2014 he wants to:"],teach:"Always have suction set up BEFORE airway intervention. Vomit during placement is the failure mode \u2014 be ready.",
+      o:[{l:"Have suction ready BEFORE you place it.",ok:1},{l:"Worry about suction only if he vomits.",ok:0},{l:"Skip suction \u2014 he's not actively vomiting.",ok:0}]},
+    {q:"And before you call it done:",qV:["And before you call it done:","Ray's last check:","One more thing per Ray:"],teach:"Reassess airway and ventilations after placement. An OPA can dislodge, and a tube in the wrong place is worse than no tube at all.",
+      o:[{l:"Reassess airway and ventilation after placement.",ok:1},{l:"Move on to the next thing.",ok:0}]}
+  ]},
+  npa:{name:"NASOPHARYNGEAL AIRWAY",steps:[
+    {q:"Contraindication check FIRST:",qV:["Contraindication check FIRST:","Before anything else, rule out:","First thing \u2014 contraindications?"],teach:"Hard NO on the NPA when: signs of basilar skull fx / midface trauma (raccoon eyes, Battle's sign, clear nasal fluid), BLOOD actively draining from the nose, or an infant <12 months old. A gag reflex is FINE \u2014 that's the NPA's niche.",
+      o:[{l:"Basilar skull fx, ACTIVE nose bleeding, OR <12 mo \u2014 those rule it out.",ok:1},{l:"A gag reflex \u2014 that rules it out.",ok:0},{l:"Skip it, a nose is a nose.",ok:0}]},
+    {q:"Size it:",qV:["Size it:","How do you measure the NPA?","Right size means measuring:"],teach:"Length = nostril to the earlobe. Diameter \u2248 the patient's pinky / the nare. Then pick the LARGEST nostril for insertion. Wrong size helps no one.",
+      o:[{l:"Nostril \u2192 earlobe for length; pinky for width; largest nostril.",ok:1},{l:"Tip of nose \u2192 chin.",ok:0},{l:"Grab the fattest one you own.",ok:0}]},
+    {q:"Prep:",qV:["Prep:","Before it goes in:","Last prep step:"],teach:"Always lubricate with WATER-soluble lube. Dry insertion shreds the nasal mucosa and earns you a nosebleed. Oil-based lube is wrong \u2014 aspiration risk.",
+      o:[{l:"Lubricate with water-soluble lube.",ok:1},{l:"Insert it dry, it's fine.",ok:0},{l:"Spit on it. Field expedient.",ok:0}]},
+    {q:"Position and insert:",qV:["Position and insert:","Insertion technique:","How does the NPA actually go in?"],teach:"Push the tip of the nose UPWARD, head neutral. Pencil-grip near the flange, bevel toward the SEPTUM, advance straight back along the FLOOR of the nose (toward the ear, not up) until the flange seats. If it won't pass \u2014 switch sides. NEVER force.",
+      o:[{l:"Nose tip up, pencil grip, bevel to septum, along the floor until flange seats.",ok:1},{l:"Push hard and twist it through.",ok:0},{l:"Aim it up toward the eyes.",ok:0}]}
+  ],rayExtra:[
+    {q:"Ray adds another check:",qV:["Ray adds another check:","Ray's not satisfied yet:","Per Ray's by-the-book brain:"],teach:"After insertion, reassess respirations and confirm the NPA hasn't backed out. NPAs can migrate \u2014 secure if you have to.",
+      o:[{l:"Reassess respirations and adjunct seating after insertion.",ok:1},{l:"Tape and forget.",ok:0}]},
+    {q:"And while you're at it:",qV:["And while you're at it:","One more, Ray says:","Ray's last word:"],teach:"Have suction ready for nasal bleeding \u2014 NPAs occasionally start one. Anticipate; don't react.",
+      o:[{l:"Keep suction ready for bleeding.",ok:1},{l:"Suction only if a problem starts.",ok:0}]}
+  ]},
+  naloxone:{name:"NALOXONE / NARCAN",steps:[
+    {q:"Confirm it's actually an opioid OD:",qV:["Confirm it's actually an opioid OD:","Indication check before the Narcan:","Recognize the OD picture first:"],teach:"Classic opioid OD triad: altered LOC + slow/shallow breathing + pinpoint pupils. All three lining up is your green light. (Also: ensure ALS is enroute.)",
+      o:[{l:"Altered LOC, slow/shallow breathing, AND pinpoint pupils.",ok:1},{l:"He's just unresponsive \u2014 that's enough.",ok:0},{l:"Bystander said he uses. Good enough.",ok:0}]},
+    {q:"Before the Narcan, the priority is:",qV:["Before the Narcan, the priority is:","Before you give naloxone, the first action is:","What comes FIRST?"],teach:"Opioid OD kills by stopping breathing. OPEN the airway and VENTILATE with a BVM on HIGH-FLOW O2 first \u2014 oxygen is the save, naloxone is the assist. (BLS routes: intranasal with atomizer, or IM per LA County protocol.)",
+      o:[{l:"Open the airway, BVM with high-flow O2.",ok:1},{l:"Give the Narcan now, breathing can wait.",ok:0},{l:"Sternal rub until he wakes.",ok:0}]},
+    {q:"State the med, dose, and route (adult):",qV:["State the med, dose, and route (adult):","Adult dose and route:","Med safety check \u2014 what are you giving?"],teach:"Adult IN: 2\u20134 mg (1 mg per nostril with the atomizer, or 4 mg/0.1 mL prefilled). Adult IM: 2 mg. Peds: 0.1 mg/kg IM or IN. Max total any route: 8 mg. Run the 6 rights / DICCE before it goes in.",
+      o:[{l:"Naloxone, 2\u20134 mg IN \u2014 split between nostrils with the atomizer.",ok:1},{l:"Whatever's in the kit, the whole thing in one nostril.",ok:0},{l:"Squirt it in his mouth.",ok:0}]},
+    {q:"It's in. Now:",qV:["It's in. Now:","After the naloxone, you:","Post-administration step:"],teach:"Titrate to BREATHING, not full wakefulness. Reassess in 2\u20133 min, re-dose if needed up to the 8 mg max \u2014 and remember naloxone wears off BEFORE the opioid does, so you keep watching.",
+      o:[{l:"Keep ventilating, reassess, re-dose to effect (max 8 mg), keep watching.",ok:1},{l:"Wake him, high-five, clear the call.",ok:0},{l:"Dump the rest of the kit in at once.",ok:0}]}
+  ],rayExtra:[
+    {q:"Ray's still talking:",qV:["Ray's still talking:","Per Ray's reassessment habit:","Ray wants:"],teach:"Continuous monitoring of respirations and SpO2 after naloxone \u2014 you're watching for the re-sed before it happens.",
+      o:[{l:"Continuous SpO2 and respiratory monitoring.",ok:1},{l:"Periodic re-checks are fine.",ok:0}]},
+    {q:"And:",qV:["And:","One more from Ray:","Ray's documentation note:"],teach:"Document dose, time, route, response. Re-sed is a forensic question down the line \u2014 you'll thank yourself.",
+      o:[{l:"Document dose, time, route, response.",ok:1},{l:"Document at the ED.",ok:0}]}
+  ]},
+  glucometer:{name:"BLOOD GLUCOSE CHECK",steps:[
+    {q:"Set up:",qV:["Set up:","First, before the stick:","Preparation step:"],teach:"BSI first. Strip in the meter, lance the SIDE of a fingertip (less painful, better blood). The first drop can be wiped away.",
+      o:[{l:"Glove up, strip in, lance the side of a fingertip.",ok:1},{l:"No gloves, lance the very tip, you're busy.",ok:0},{l:"Squeeze the finger like a stress ball first.",ok:.5}]},
+    {q:"The reading comes up: {{bgl}} mg/dL. That is:",qV:["The reading comes up: {{bgl}} mg/dL. That is:","Meter reads {{bgl}} mg/dL. Interpretation?","Result \u2014 {{bgl}} mg/dL. That number means:"],teach:"LA County DHS oral glucose threshold: <60 mg/dL OR suspected hypoglycemia. Over ~250 is hyperglycemia (think DKA \u2014 the LAST thing you give is sugar). Normal range roughly 60\u2013180.",
+      o:[{l:"Hypoglycemia \u2014 a true emergency.",ok:(c)=>c.bgl<60?1:0},
+         {l:"Hyperglycemia / DKA territory \u2014 handle carefully, NO sugar.",ok:(c)=>c.bgl>250?1:0},
+         {l:"Normal-ish, move along.",ok:(c)=>(c.bgl>=60&&c.bgl<=180)?1:0},
+         {l:"A solid fuel level.",ok:0}]},
+    {q:"Before any sugar goes in, you confirm:",qV:["Before any sugar goes in, you confirm:","Contraindication check before glucose:","Rule out before oral glucose:"],teach:"Oral glucose contraindications (LA County): BGL >60 mg/dL, NO history of diabetes, or patient UNABLE TO SWALLOW. If he can't protect his airway, oral glucose aspirates \u2014 that's a fatal mistake.",
+      o:[{l:"He's alert, has a diabetic history, AND can swallow safely.",ok:1},{l:"He's drifting off \u2014 push the paste before he goes out.",ok:0},{l:"Sugar can't hurt, give it either way.",ok:0}]},
+    {q:"Now treat. Med safety check (right pt / med / dose / route), then:",qV:["Now treat. Med safety check (right pt / med / dose / route), then:","6 rights / DICCE checked. Treatment:","Treatment for the number you got:"],teach:"Hypo + alert + can swallow \u2192 oral glucose paste between cheek and gum (or assist self-admin), then RECHECK in 10\u201315 min. Hyper \u2192 NO sugar; support, O2, expedite ALS.",
+      o:[{l:"Oral glucose paste between cheek and gum, then RECHECK.",ok:(c)=>c.bgl<60?1:0},
+         {l:"NO sugar \u2014 support, O2, expedite ALS for likely DKA.",ok:(c)=>c.bgl>250?1:0},
+         {l:"An injection of epinephrine.",ok:0},
+         {l:"Tell him to eat better and leave.",ok:0}]}
+  ],rayExtra:[
+    {q:"Ray's not done:",qV:["Ray's not done:","Per Ray's protocol brain:","Ray adds:"],teach:"Always recheck BGL in 10\u201315 minutes after treatment. Treat-and-go is how patients re-crash on the curb.",
+      o:[{l:"Recheck BGL in 10\u201315 minutes.",ok:1},{l:"One reading is plenty.",ok:0}]},
+    {q:"And:",qV:["And:","Ray's last point:","One more thorough Ray check:"],teach:"Vitals and 'why now?' \u2014 missed insulin, skipped meal, infection. The treatment is glucose; the diagnosis is bigger.",
+      o:[{l:"Vitals + 'why now?' history.",ok:1},{l:"Skip the workup, just treat.",ok:0}]}
+  ]},
+  epi:{name:"EPINEPHRINE AUTO-INJECTOR (ASSIST)",steps:[
+    {q:"Confirm before you assist:",qV:["Confirm before you assist:","Indication check:","Before you assist, you need:"],teach:"LA County indications: anaphylaxis, airway swelling, OR severe respiratory distress / bronchospasm (severe asthma). Manage airway + give O2 first, ensure ALS is enroute. Use the patient's own prescribed pen.",
+      o:[{l:"Anaphylaxis, airway swelling, OR severe bronchospasm \u2014 and it's his pen.",ok:1},{l:"Any rash counts.",ok:0},{l:"He's anxious, close enough.",ok:0}]},
+    {q:"State the med, dose, and route:",qV:["State the med, dose, and route:","Med safety check \u2014 what are you giving?","Dose and route for an adult:"],teach:"Adult: epinephrine 0.3 mg IM, LATERAL thigh. Pediatric: 0.15 mg IM if 15\u201330 kg. Run the 6 rights / DICCE before the click.",
+      o:[{l:"Epi 0.3 mg IM, lateral thigh (adult).",ok:1},{l:"Epi 1 mg IV push (ALS — outside BLS scope).",ok:0},{l:"Whatever's on the pen.",ok:0}]},
+    {q:"Prep & site:",qV:["Prep & site:","Where does it go and how?","Site & technique:"],teach:"Blue to the sky (cap off), orange to the LATERAL (outer) mid-thigh at 90\u00b0. Goes through clothing. NEVER put a thumb over the orange end \u2014 that's a fingerstick of epi waiting to happen.",
+      o:[{l:"Cap off, orange tip 90\u00b0 to the LATERAL thigh.",ok:1},{l:"Into the upper arm.",ok:0},{l:"Thumb over the orange end to test it.",ok:0}]},
+    {q:"After the click:",qV:["After the click:","Pen's in. Now:","Post-administration:"],teach:"HOLD for 10 SECONDS (per LA County), then remove and place in a sharps container. Massage the site, high-flow O2, monitor. Symptoms can come ROARING back (biphasic) \u2014 repeat dose after 10 min PRN, max 3 doses total.",
+      o:[{l:"Hold 10 sec, sharps the pen, massage, O2, monitor; repeat in 10 min if needed.",ok:1},{l:"Hold ~3 sec and yank it out.",ok:0},{l:"Fire 3 more into him for good measure.",ok:0}]}
+  ],rayExtra:[
+    {q:"Ray reminds you:",qV:["Ray reminds you:","Per Ray's monitoring habit:","Ray's add-on:"],teach:"Vitals every 5 minutes after epi \u2014 HR, BP, breathing. Epi is potent and patients can have cardiac effects on top of everything else.",
+      o:[{l:"Vitals every 5 min, monitor cardiac response.",ok:1},{l:"Pen's in, we're good.",ok:0}]},
+    {q:"And finally:",qV:["And finally:","Ray's last note:","One more for Ray:"],teach:"Document the trigger if known. Brief the receiving facility CLEARLY \u2014 the ED and the patient's allergist will both need this.",
+      o:[{l:"Document the trigger, brief ED clearly.",ok:1},{l:"They'll figure it out at the ED.",ok:0}]}
+  ]}
+};
+
+/* ===================== 10 CALLS ===================== */
+const CALLS=[
+  {id:"od",crewCan:true,direct:"airway first, bag him, then the naloxone \u2014 and nobody walks off when he wakes up",title:"\u201CMan Down, San Julian\u201D",who:"DISPATCH",timeCritical:true,
+   scene:"Unresponsive male behind the dumpster. Resps ~6 and snoring, pupils like pinheads, a needle nearby. A crowd of nine is filming.",
+   sceneVars:[
+     "Unresponsive {age}-year-old male slumped behind the dumpster on San Julian. Resps ~6 and snoring, pupils pinned, needle by his hand. Nine bystanders, four phones filming.",
+     "{age}-year-old male down in a parked car at 6th and Wall, doors open. Resps 5, shallow, pinpoint pupils, glass pipe in the door pocket. His friend is shaking him and screaming.",
+     "Manager opens the back bathroom of a fast-food spot \u2014 {age}-year-old male unresponsive on the tile, RR ~4 agonal, pupils pinned, two empty Narcan boxes on the floor next to him."
+   ],
+   q:"What's the play?",
+   qVars:["What's the play?","First move?","You're at the head \u2014 go.","Where do your hands start?"],
+   options:[
+     {l:"Open airway, ventilate with the BVM, and give naloxone.",key:"A",skill:"naloxone",needs:["naloxone","bvm"],consume:["naloxone"],saved:null,det:true,
+       text:"Airway open, BVM seal holds, naloxone in. His resps climb back. Now you don't leave him, because\u2026",
+       noSupplyText:"You reach for the Narcan/BVM you couldn't afford. You bag him by mouth-barrier and limp it \u2014 he barely squeaks through. Stock the rig or scavenge harder.",
+       noSupplyTeach:"Ventilation is the save. Without naloxone AND a way to ventilate, an opioid OD is a coin flip.",noSupplySc:-4,noSupplySaved:false},
+     {l:"Slam the naloxone, he wakes, you clear the scene.",key:"B",ok:"mid",sc:-6,saved:false,
+       text:"He wakes swinging, you leave \u2014 and the naloxone wears off faster than the dope. Ten minutes later he's down again, unwatched.",
+       teach:"Naloxone wears off before the opioid. Ventilate, monitor, re-dose. Never wake-and-walk."},
+     {l:"Diesel bolus \u2014 scoop and haul, treat nothing.",key:"C",ok:"bad",sc:-13,saved:false,
+       text:"You floor it to the ED with an apneic patient and no airway support. Speed is not a treatment.",
+       teach:"A fast transport doesn't breathe for anyone. Manage airway and ventilation on scene and en route."}
+   ],
+   det:{who:"YOUR PATIENT",scene:"The Narcan kicks in HARD. He sits bolt upright, rips the mask off, and announces he is leaving \u2014 confused, sweaty, and combative.",sceneVars:["The Narcan kicks in HARD. He sits bolt upright, rips the mask off, and announces he is leaving \u2014 confused, sweaty, and combative.","Naloxone hits and he comes up swinging, ripping off the mask and demanding his phone. Sweating, eyes darting, hostile.","He gasps awake, shoves your hands away, and tries to stand \u2014 wobbly, confused, and angry that 'someone called.'"],q:"He's halfway to standing. Go.",qVars:["He's halfway to standing. Go.","He's trying to leave. Now what?","Awake and combative. Your move?"],
+     options:[
+       {l:"Calm him, keep him down, monitor for re-sedation, strongly push transport.",key:"A",ok:"good",sc:12,saved:true,transport:true,
+         text:"You talk him down, keep eyes on his breathing, and convince him to ride in. Textbook follow-through.",
+         teach:"Post-naloxone patients are often agitated AND at risk of re-sedating. De-escalate, monitor, and push hard for transport."},
+       {l:"He's awake \u2014 let him sign off and walk.",key:"B",ok:"bad",sc:-12,saved:false,
+         text:"He stumbles off down the alley. He's found down again within the hour. You let the clock and the drug beat you.",
+         teach:"'Awake' after naloxone is not 'safe.' The drug can outlast the antidote \u2014 that's exactly when they walk away and crash."}
+     ]}},
+
+  {id:"hypo",crewCan:true,direct:"check a sugar before anyone calls him drunk, then oral glucose if he can swallow",title:"\u201CDrunk Guy At The Corner Store\u201D",who:"FLAG-DOWN",
+   scene:"A regular slumped by the corner store, confused and diaphoretic, talking nonsense. Clerk says 'he's always like this.' He's wearing a medical-alert bracelet nobody's read.",
+   sceneVars:[
+     "A {age}-year-old regular slumped by the corner store, confused and diaphoretic, talking words that don't go together. Clerk says 'he's always like this.' Med-alert bracelet nobody read.",
+     "Family flags you down outside a duplex \u2014 dad, {age}, acting drunk in the kitchen. Sweating through his shirt, keys in the freezer. Insulin in the fridge says Type 1.",
+     "PD has a {age}-year-old male detained for public intox \u2014 except he's pale, clammy, and answering questions with words in the wrong order. The officer isn't sure anymore."
+   ],
+   q:"He's altered. Now what?",
+   qVars:["He's altered. Now what?","What's step one?","Where do you start?","Altered mental status \u2014 your move?"],
+   options:[
+     {l:"Check a blood glucose and act on the number.",key:"A",skill:"glucometer",procCtx:{bglType:'low'},needs:["glucometer","strips"],consume:["strips","glucose"],saved:null,det:true,
+       text:"Sugar comes back low. He can swallow, so you give oral glucose. Minutes later he's arguing about the Dodgers \u2014 the universal sign of recovery.",
+       noSupplyText:"You go to check a sugar and realize you've got no glucometer/strips. You're now guessing on an altered patient. Don't.",
+       noSupplyTeach:"Every altered patient gets a sugar. No meter = you're blind to the #1 fixable cause.",noSupplySc:-4,noSupplySaved:false},
+     {l:"Known drunk, just the regular. Let him sleep it off.",key:"B",ok:"bad",sc:-15,saved:false,
+       text:"You write him off. He's actually at 38 and crashing. The bracelet you didn't read says TYPE 1 DIABETIC.",
+       teach:"'Known drunk' is how hypoglycemics die. The label is not the diagnosis \u2014 check the sugar."},
+     {l:"Assist with an epinephrine pen.",key:"C",ok:"bad",sc:-13,saved:false,
+       text:"No allergic reaction here. You've now jabbed epi into a hypoglycemic man and his heart would like a word.",
+       teach:"Match the tool to the problem. Epi is for anaphylaxis, full stop."}
+   ],
+   det:{who:"YOUR PATIENT",scene:"Sugar's back up, he feels GREAT, and now he wants to refuse and head to work.",sceneVars:["Sugar's back up, he feels GREAT, and now he wants to refuse and head to work.","He perks up fast, declares he's 'fine now,' and starts gathering his stuff. He's late for a shift.","Color's back and he's chatty again. He waves off transport \u2014 he's got things to do."],q:"He's standing and reaching for the door.",qVars:["He's standing and reaching for the door.","He's signing off. What do you do?","Refusal incoming. Your response?"],
+     options:[
+       {l:"Recheck the sugar, feed him a real meal, explain the refusal risk, push transport.",key:"A",ok:"good",sc:11,saved:true,
+         text:"You recheck, get food in him, and walk him through why a quick fix can crash again. He agrees to go in.",
+         teach:"Oral glucose is short-acting \u2014 it can wear off. Recheck, feed complex carbs, and make refusals truly informed."},
+       {l:"Sugar's normal, wave goodbye.",key:"B",ok:"bad",sc:-10,saved:false,
+         text:"He bolts before the carbs catch up, crashes on the bus an hour later. You treated the number, not the patient.",
+         teach:"A normal recheck right after glucose isn't durable. These patients walk away and re-crash \u2014 keep them and feed them."}
+     ]}},
+
+  {id:"ana",crewCan:true,direct:"that's anaphylaxis \u2014 assist him with his own pen now, then O2 and call ALS",title:"\u201CThe Lunch Cart\u201D",who:"BYSTANDER",timeCritical:true,
+   scene:"A customer ate something with peanuts. Lips and tongue swelling, hives blooming, audible wheeze, croaks 'my throat's closing.' He's fumbling his OWN prescribed EpiPen from his bag.",
+   sceneVars:[
+     "{age}-year-old customer took two bites of pad thai with peanuts. Lips and tongue swelling, hives down the neck, audible wheeze, croaks 'my throat's closing.' He's digging his own EpiPen out of the bag.",
+     "Office party. {age}-year-old male ate the shrimp dip he was warned about. Hives across his chest, voice gone hoarse, wheeze you can hear across the room \u2014 wife has his prescription pen in her hand.",
+     "Bee sting in a {age}-year-old's backyard. Lips swelling fast, tongue thickening, wheezing through it. The host is sprinting out with the patient's own EpiPen."
+   ],
+   q:"He's got the pen. You're EMTs. Go.",
+   qVars:["He's got the pen. You're EMTs. Go.","Pen's right there. Now?","You see anaphylaxis \u2014 next move?","Airway's closing. Choose."],
+   options:[
+     {l:"Assist him with HIS pen, then O2 and call ALS.",key:"A",skill:"epi",needs:[],saved:null,det:true,
+       text:"Pen to the lateral thigh, firm, held, then O2 and an ALS request. The wheeze eases. You bought him the minutes he needed.",
+       teach:"Assisting with the patient's OWN prescribed auto-injector is in your scope."},
+     {l:"\u201CWe're BLS, we can't give epi.\u201D Wait for medics.",key:"B",ok:"bad",sc:-15,saved:false,
+       text:"You stand on scope you don't understand while his airway closes. The medics arrive to a far worse patient.",
+       teach:"You may not carry your own epi as a basic \u2014 but ASSISTING with the patient's prescribed pen IS in scope. Know the line."},
+     {l:"Give him Benadryl and tell him to relax.",key:"C",ok:"mid",sc:-9,saved:false,
+       text:"An antihistamine is way too slow for a closing airway. You're fighting a freight train with a stop sign.",
+       teach:"Epinephrine is the time-critical drug in anaphylaxis. Everything else is an adjunct."}
+   ],
+   det:{who:"YOUR PATIENT",scene:"Ten minutes out, the hives and the wheeze come ROARING back, worse than before.",sceneVars:["Ten minutes out, the hives and the wheeze come ROARING back, worse than before.","On the way to the hospital, his hives bloom again and the wheeze returns louder than the first time.","Halfway to the ED the swelling rebounds \u2014 hives spreading fast, audible stridor."],q:"He's grabbing his throat again.",qVars:["He's grabbing his throat again.","Symptoms are back. Your move?","Rebound \u2014 what do you do?"],
+     options:[
+       {l:"Second dose if available/ordered, O2, expedite, watch the airway.",key:"A",ok:"good",sc:12,saved:true,transport:true,
+         text:"You recognize the rebound, give the second dose, and run him in hot to the medics. Good catch.",
+         teach:"Anaphylaxis can be BIPHASIC \u2014 it returns after the first dose fades. Anticipate it; a second dose may be needed."},
+       {l:"He already got one, he's maxed out.",key:"B",ok:"bad",sc:-12,saved:false,
+         text:"You assume one-and-done. His airway closes en route. One dose is not a guarantee.",
+         teach:"There's no 'maxed out' when the airway is closing again. Reassess and re-treat the rebound."}
+     ]}},
+
+  {id:"opa",crewCan:false,soloScene:"Your medic's locked up with PD and the second patient \u2014 it's you at the head, and your last hands-on airway was a long time ago.",captainSolo:[{l:"Dig up what you remember \u2014 measure it and place an OPA as best you can.",key:"A",skill:"opa",needs:["opa"],consume:["opa"],saved:true,sc:4,text:"It's not pretty and you second-guess the size twice, but the adjunct seats and he's moving air. Rusty \u2014 but it held, and the crew nods at the old man.",noSupplyText:"You reach for an OPA the rig doesn't have, and you're left holding a jaw-thrust for the duration.",noSupplyTeach:"Unresponsive + no gag is the textbook OPA patient. No adjunct = your hands are stuck.",noSupplySc:-3,noSupplySaved:false,teach:"Even rusty, the right move in a no-gag unresponsive patient is to place the adjunct. Most-correct, not flawless \u2014 that's the captain tax."},{l:"Hold a manual jaw-thrust and wait for a medic to free up.",key:"B",ok:"mid",sc:-3,saved:false,text:"A jaw-thrust isn't wrong \u2014 but you pin both hands indefinitely when a simple adjunct would free you. Not the best answer.",teach:"Manual airway maneuvers are a legitimate stopgap, not a definitive fix when you could place an adjunct. 'Not wrong' isn't 'best.'"},{l:"Step back \u2014 the medics are better at airways than you.",key:"C",ok:"bad",sc:-11,saved:false,text:"They're buried with PD and the other patient. While you defer, his tongue closes the airway. Leadership isn't abdication.",teach:"Knowing your crew is sharper doesn't excuse inaction when they're unavailable and the patient can't wait."}],title:"\u201CFound Down, Bus Bench\u201D",who:"PD ON SCENE",
+   scene:"Deeply unconscious male at the bus bench. NO gag when you check \u2014 he is not protecting his own airway. He is a very large human being.",
+   sceneVars:[
+     "{age}-year-old male unresponsive at the bus bench. NO gag when you check \u2014 not protecting his airway. A very large human being.",
+     "Apartment manager opens a door to find a {age}-year-old male unresponsive on the carpet, no gag, snoring badly. Built like a refrigerator with shoulders.",
+     "PD has a {age}-year-old at a back-alley dumpster, deeply unconscious, NO gag reflex, big and barrel-chested. They want him gone before the crowd grows."
+   ],
+   q:"You're placing an airway adjunct.",
+   qVars:["You're placing an airway adjunct.","Airway's yours.","Decide and move.","How are you opening this airway?"],
+   options:[
+     {l:"Place an OPA \u2014 measure and insert it properly.",key:"A",skill:"opa",needs:["opa"],consume:["opa"],saved:true,sc:6,
+       text:"Adjunct seated, tongue off the airway, he's moving air. That's the whole ballgame.",
+       noSupplyText:"You reach for an OPA and the kit's empty \u2014 didn't buy or scavenge one. You hold a manual jaw-thrust the whole call and pray.",
+       noSupplyTeach:"An unconscious, no-gag patient is the textbook OPA candidate. No adjunct = your hands are busy forever.",noSupplySc:-3,noSupplySaved:false},
+     {l:"Grab whatever airway's on top and jam it in.",key:"B",ok:"mid",sc:-6,saved:false,
+       text:"No measuring. You guess huge, it bottoms out on soft tissue and obstructs worse than the tongue did. Re-do, time lost.",
+       teach:"'He's big so go big' isn't measuring. Mouth-corner to jaw-angle \u2014 every time."},
+     {l:"Just tilt the head and hope.",key:"C",ok:"mid",sc:-4,saved:false,
+       text:"Position helps, but with no adjunct in a no-gag patient, the tongue slides right back the second you let go.",
+       teach:"Positioning buys seconds; the adjunct holds the airway open hands-free."}
+   ]},
+
+  {id:"talker",crewCan:true,direct:"he's protecting his own airway \u2014 hands off the OPA, give him O2 and coach his breathing",title:"\u201CThe Talker\u201D",who:"PARTNER",decision:true,
+   scene:"Anxious guy, breathing fast, fully awake and narrating his whole week. The second you bring an OPA near his lips he gags and bats your hand away. He is very much defending his own airway.",
+   sceneVars:[
+     "{age}-year-old male, anxious, breathing fast, fully awake and narrating his whole week. The instant you bring an OPA near his lips he gags and bats your hand away. Very much defending his own airway.",
+     "Bystanders called for 'someone passing out' \u2014 you arrive to a {age}-year-old male sitting up, breathing fast, talking nonstop. He gags hard the second your hand goes near his mouth.",
+     "PD flag-down for an altered male, but on arrival the {age}-year-old is awake and answering you in complete sentences. He gags when you check for one. Airway is his."
+   ],
+   q:"Airway adjunct? Which one? Or none?",
+   qVars:["Airway adjunct? Which one? Or none?","What goes in \u2014 if anything?","Your call on the airway.","Pick a tool, or skip it."],
+   options:[
+     {l:"None \u2014 he's protecting his own airway. Coach breathing, O2, reassess.",key:"A",ok:"good",sc:14,saved:true,
+       text:"You skip the adjunct, talk him down, put him on O2 and reassess. His rate settles. The right move was the one you DIDN'T jam in.",
+       teach:"Adjuncts are for patients who can't maintain their own airway. Conscious + intact gag = no OPA. Knowing when NOT to is the advanced skill."},
+     {l:"Force the OPA in \u2014 he clearly needs an airway.",key:"B",ok:"bad",sc:-13,saved:false,
+       text:"He gags, vomits across your uniform, and now you're managing an aspiration you personally caused.",
+       teach:"An OPA in an intact gag triggers vomiting and aspiration. The gag IS the contraindication."},
+     {l:"Slip in an NPA instead.",key:"C",ok:"mid",sc:-3,saved:false,
+       text:"Cleanly done is fine, but he was maintaining his own airway the whole time. Right craft, wrong call.",
+       teach:"An NPA is better tolerated than an OPA \u2014 but it's still only for someone NOT managing their own airway."}
+   ]},
+
+  {id:"npa",crewCan:false,soloScene:"The crew's hands are full and the jaw's clamped shut. You're kneeling at the airway, and the nasal route is the one you've practiced least.",captainSolo:[{l:"Go nasal \u2014 you THINK it's nostril-to-earlobe \u2014 lube it and place an NPA.",key:"A",skill:"npa",needs:["npa","lube"],consume:["npa","lube"],saved:true,sc:4,text:"You hesitate on the measurement, but you lube it and ease it along the floor of the nose, and the snoring stops. Hedged and rusty \u2014 but correct.",noSupplyText:"No NPA or lube in the bag. You're stuck nursing a mask seal and hoping the jaw relaxes.",noSupplyTeach:"Clenched jaw / intact gag is exactly the NPA's niche \u2014 if you stocked it.",noSupplySc:-3,noSupplySaved:false,teach:"Clenched jaw with reduced LOC = NPA territory. Even unsure, that's the most-correct tool here. Small captain tax for the rust."},{l:"Bag him with a tight mask seal and hold until help frees up.",key:"B",ok:"mid",sc:-3,saved:false,text:"A good two-hand seal buys time \u2014 it's not wrong \u2014 but the obstruction's still there and your hands are pinned. A stopgap, not the answer.",teach:"BVM with a good seal is valid temporizing, but it doesn't relieve the obstruction. The NPA is the better fix."},{l:"Pry the jaw and use the oral airway you remember better.",key:"C",ok:"bad",sc:-10,saved:false,text:"You fight the clamped jaw, trigger a gag, and he vomits. The mouth was a no-go the second it clenched.",teach:"A clenched jaw / intact gag rules OUT the OPA. Defaulting to the tool you 'remember better' is how rust hurts patients."}],title:"\u201CSemi-Conscious, Clenched Jaw\u201D",who:"FAMILY",
+   scene:"Found semi-conscious on the couch after a bender, snoring respirations, jaw clamped so tight you can't get an OPA in. No trauma, no head injury, no facial bleeding.",
+   sceneVars:[
+     "{age}-year-old male found semi-conscious on the couch after a bender. Snoring respirations, jaw clamped so tight you can't get an OPA in. No trauma, no head injury.",
+     "Family found their {age}-year-old loved one barely responsive after taking 'something to relax.' Jaw set, no facial trauma, snoring loud enough to hear from the front door.",
+     "A {age}-year-old male slumped in a chair at the back of a bar \u2014 reduced LOC, jaw clenched, no head injury reported, snoring his way through the obstruction."
+   ],
+   q:"He needs an airway and the mouth is a no-go.",
+   qVars:["He needs an airway and the mouth is a no-go.","Mouth's locked. What now?","You need to open this airway.","Jaw won't open. Your move?"],
+   options:[
+     {l:"Place an NPA \u2014 size, lube, and insert it properly.",key:"A",skill:"npa",needs:["npa","lube"],consume:["npa","lube"],saved:true,sc:6,
+       text:"Sized, lubed, bevel to the septum, in clean. The snoring stops and he's moving air. Perfect tool for a clenched jaw.",
+       noSupplyText:"You reach for an NPA (or the lube) you don't have. You manage with positioning and suction and sweat a lot.",
+       noSupplyTeach:"The NPA shines exactly here \u2014 reduced LOC with a clenched jaw or intact gag. No NPA/lube and you're improvising.",noSupplySc:-3,noSupplySaved:false},
+     {l:"Pry the jaw and force an OPA.",key:"B",ok:"bad",sc:-10,saved:false,
+       text:"You crank the jaw, he gags and vomits. The OPA was the wrong tool the moment the jaw clenched.",
+       teach:"Clenched jaw / intact gag = NPA territory, not OPA. Don't fight the mouth."},
+     {l:"Leave the airway, he's breathing 'okay.'",key:"C",ok:"mid",sc:-5,saved:false,
+       text:"Snoring respirations ARE a partially obstructed airway. 'Okay' it is not.",
+       teach:"Snoring = the tongue is in the way. Open that airway."}
+   ]},
+
+  {id:"triage",crewCan:true,direct:"work the quiet one first \u2014 the screamer's breathing, the silent one isn't",title:"\u201CTwo At Once\u201D",who:"DISPATCH",decision:true,
+   scene:"One scene, TWO patients. One is screaming and clutching a clearly broken arm. The other is silent, slumped, barely breathing. You're the only crew for four minutes.",
+   sceneVars:[
+     "One scene, TWO patients. One is screaming and clutching a clearly broken arm. The other, similar age, is silent, slumped, barely breathing. Only crew for four minutes.",
+     "Two-vehicle MVC. Driver \u2014 {age}-ish \u2014 is out screaming about his arm. Passenger, also young, is unconscious and barely moving air. Backup is four minutes out.",
+     "Apartment scene, two relatives. One {age}-year-old is wailing with chest pain; the other is silent in a chair across the room, barely breathing. You and your partner have four minutes."
+   ],
+   q:"Who gets you first?",
+   qVars:["Who gets you first?","Pick one. Now.","Where are your hands going first?","Which patient leads?"],
+   options:[
+     {l:"The quiet one who's barely breathing.",key:"A",ok:"good",sc:15,saved:true,
+       text:"You go to the silent patient \u2014 the one not making noise is the one who can't. Airway first, then the arm. That's triage.",
+       teach:"The screamer has an airway and is breathing. The quiet, barely-breathing patient is the true emergency. Loud is rarely sickest."},
+     {l:"The screaming one \u2014 clearly in agony.",key:"B",ok:"bad",sc:-15,saved:false,
+       text:"You splint an arm while the silent patient stops breathing entirely behind you. Pain is loud; dying is quiet.",
+       teach:"Triage by threat to life, not volume. Airway/breathing beats dramatic-but-stable every time."},
+     {l:"Call a second unit and wait before touching anyone.",key:"C",ok:"mid",sc:-3,saved:false,
+       text:"Calling help is right \u2014 but you've got a dying patient NOW and four minutes alone. You don't get to pause the clock.",
+       teach:"Request resources early AND work the sickest patient. Calling for help isn't a substitute for acting."}
+   ]},
+
+  {id:"seizure",crewCan:true,direct:"protect her head, time it, nothing in her mouth, check a sugar when it stops",female:true,ageMin:20,ageMax:55,title:"\u201CSeizing In The Park\u201D",who:"BYSTANDER",
+   scene:"Young woman actively seizing on a park bench, full tonic-clonic. A bystander is trying to shove a wallet in her mouth 'so she doesn't swallow her tongue.'",
+   sceneVars:[
+     "{age}-year-old woman actively seizing on a park bench, full tonic-clonic. A bystander is trying to shove a wallet in her mouth 'so she doesn't swallow her tongue.'",
+     "Office break room \u2014 {age}-year-old woman on the floor in full tonic-clonic, coworkers panicking, one trying to pry her jaw open with a pen.",
+     "{age}-year-old in the grocery aisle mid-seizure, biting down, no helmet on the way to the floor. A clerk wants to know if he should give her 'something to wake her up.'"
+   ],
+   q:"It's still going. What do you do?",
+   qVars:["It's still going. What do you do?","She's seizing. Move.","Active seizure \u2014 what's your move?","Mid-seizure. Choose."],
+   options:[
+     {l:"Protect her head, clear the area, time it, NOTHING in the mouth; check a sugar after.",key:"A",ok:"good",sc:13,saved:null,det:true,
+       text:"You cushion her head, move the bench, time the seizure, and stop the wallet guy. When it ends you check a sugar \u2014 smart, hypoglycemia causes seizures.",
+       teach:"During a seizure: protect the head, clear hazards, time it, and put NOTHING in the mouth. Afterward check a BGL \u2014 low sugar is a common, fixable cause."},
+     {l:"Hold her down hard and restrain the limbs.",key:"B",ok:"bad",sc:-12,saved:false,
+       text:"You pin her and a thrashing arm dislocates against your grip. Restraining a seizing patient causes injuries.",
+       teach:"Never restrain a seizing patient \u2014 you can't stop the seizure and you cause injuries. Protect, don't pin."},
+     {l:"Force an OPA in mid-seizure to protect the airway.",key:"C",ok:"bad",sc:-11,saved:false,
+       text:"Teeth, blood, broken adjunct. You can't place an oral airway in a clenched, seizing jaw.",
+       teach:"You can't safely place an OPA mid-seizure. Manage the airway with positioning during; reassess after."}
+   ],
+   det:{who:"YOUR PATIENT",scene:"The seizure stops. She's postictal \u2014 groggy, confused, and now she's getting up swinging, trying to stumble away.",sceneVars:["The seizure stops. She's postictal \u2014 groggy, confused, and now she's getting up swinging, trying to stumble away.","Seizure ends, postictal phase kicks in: confused, slurring, swinging at unseen people, trying to wander off.","It stops. She comes around postictal \u2014 disoriented, slow, and now lurching toward the street."],q:"She's on her feet and disoriented.",qVars:["She's on her feet and disoriented.","Postictal and walking. Now what?","She's trying to leave. Your move?"],
+     options:[
+       {l:"Reassure, give her space, protect her, monitor the airway, encourage transport.",key:"A",ok:"good",sc:11,saved:true,
+         text:"You stay calm, keep her from wandering into the street, monitor her breathing, and ease her toward the gurney.",
+         teach:"The postictal phase is confused and combative \u2014 it's normal. Reassure, protect, watch the airway, and transport (esp. a first-time seizure)."},
+       {l:"She's awake and walking \u2014 clear the call.",key:"B",ok:"bad",sc:-10,saved:false,
+         text:"She wanders off postictal and seizes again at a curb with no one there. 'Walking' postictal is not 'fine.'",
+         teach:"Postictal patients are altered and can seize again. Don't let them walk off \u2014 monitor and transport."}
+     ]}},
+
+  {id:"hyper",crewCan:true,direct:"check the sugar before anyone hands him candy \u2014 that breathing is DKA, not low sugar",title:"\u201CSick And Sweet\u201D",who:"FAMILY",
+   scene:"Diabetic teen, sick for two days. Deep rapid breathing, fruity breath, very thirsty, sleepy but rousable. Family asks if he just needs 'some sugar.'",
+   sceneVars:[
+     "{age}-year-old diabetic, sick for two days. Deep rapid breathing, fruity breath, very thirsty, sleepy but rousable. Family asks if he just needs 'some sugar.'",
+     "{age}-year-old male with Type 1 diabetes ran out of insulin three days ago. Breathing fast and deep, smells like nail polish remover, can barely keep his eyes open. Mom suggests juice.",
+     "{age}-year-old at a college dorm \u2014 roommate says he's been sleeping all day and 'breathing weird.' Deep Kussmaul respirations, fruity breath, half-conscious. Friend wants to give him candy."
+   ],
+   q:"He's altered and diabetic. Step one?",
+   qVars:["He's altered and diabetic. Step one?","Diabetic, altered. Where do you start?","What's your first action?","Altered + diabetic \u2014 first move?"],
+   options:[
+     {l:"Check a blood glucose and read it correctly.",key:"A",skill:"glucometer",procCtx:{bglType:'high'},needs:["glucometer","strips"],consume:["strips"],saved:true,sc:8,transport:true,
+       text:"Meter reads HIGH \u2014 way up. This is the high end, not low. No oral glucose; you support him, O2, and transport NOW for ALS.",
+       noSupplyText:"No meter, no strips. You're guessing on a diabetic in trouble \u2014 and 'give him sugar' would've been dead wrong here.",
+       noSupplyTeach:"This is hyperglycemia (think DKA). Sugar is the LAST thing he needs. A meter would've shown you instantly.",noSupplySc:-4,noSupplySaved:false},
+     {l:"Give oral glucose \u2014 family's probably right.",key:"B",ok:"bad",sc:-13,saved:false,
+       text:"You pour sugar into a kid whose sugar is already sky-high. You just poured gas on the fire.",
+       teach:"Not every altered diabetic is LOW. Fruity breath + deep rapid breathing = HIGH (DKA). Check first; never guess sugar."},
+     {l:"Assist with an epi pen for the breathing trouble.",key:"C",ok:"bad",sc:-11,saved:false,
+       text:"That deep rapid breathing is the body dumping acid, not anaphylaxis. Epi does nothing good here.",
+       teach:"Kussmaul breathing in DKA isn't a respiratory allergy. Recognize the pattern; don't reach for epi."}
+   ]},
+
+  {id:"headinj",crewCan:false,soloScene:"Your medic's on the radio calling a trauma alert and the other crew's packaging. The airway's yours, and something about this guy feels off.",captainSolo:[{l:"Keep it simple \u2014 oral airway and positioning, stay OUT of the nose, treat as trauma.",key:"A",ok:"good",sc:9,saved:true,text:"Something nags at you about the bruised eyes and the runny nose, so you avoid the nasal route, use an oral airway and positioning, and run him as trauma. Right call, even rusty.",teach:"Raccoon eyes + clear nasal fluid = possible basilar skull fracture \u2192 NO NPA. Oral airway/positioning instead. The rust didn't matter; the contraindication did."},{l:"Slide in an NPA \u2014 it's the gentler airway and your hands know it.",key:"B",ok:"bad",sc:-15,saved:false,text:"With a likely basilar skull fracture, the NPA is the ONE airway you must not use. 'The one my hands know' was the trap.",teach:"The classic NPA contraindication is suspected basilar skull fracture / midface trauma. Comfort with a tool never overrides a contraindication."},{l:"You're unsure \u2014 hold manual airway and let the medic decide when free.",key:"C",ok:"mid",sc:-5,saved:false,text:"Deferring on an obvious trauma costs minutes he doesn't have. Manual airway buys a little, but indecision is its own mistake.",teach:"When the signs are this clear (raccoon eyes, CSF), hesitation costs time. Recognize the trauma and act."}],title:"\u201CScooter vs. Curb\u201D",who:"PD ON SCENE",
+   scene:"Helmetless rider came off an e-scooter face-first. Now altered, slow to respond, with bruising around both eyes and clear fluid trickling from his nose. Looks almost like an OD.",
+   sceneVars:[
+     "Helmetless {age}-year-old came off an e-scooter face-first. Now altered, slow to respond, with bruising around both eyes and clear fluid trickling from his nose. Looks almost like an OD.",
+     "{age}-year-old tripped over a curb at speed on his electric scooter \u2014 no helmet. Altered, bruising around the eyes, a watery drip from one nostril. Bystanders thought he was high.",
+     "{age}-year-old fell from a low ladder onto concrete. No helmet. Altered, raccoon-eye bruising forming, thin clear fluid from one ear. Could pass for opioid OD if you didn't look."
+   ],
+   q:"He's not protecting his airway well. Your move?",
+   qVars:["He's not protecting his airway well. Your move?","Airway's compromised. Choose.","Decide \u2014 quickly.","His airway's slipping. What now?"],
+   options:[
+     {l:"OPA + positioning (NOT an NPA), check a sugar, treat as trauma, rapid transport.",key:"A",ok:"good",sc:14,saved:true,transport:true,
+       text:"You avoid the nose entirely, use an oral airway and positioning, check a sugar to rule out the mimic, and run him in as trauma.",
+       teach:"Raccoon eyes + clear nasal fluid = possible basilar skull fracture \u2192 NO NPA (it can go the wrong way). Use an OPA/positioning, and still check a sugar."},
+     {l:"Slide in an NPA \u2014 easiest nasal airway.",key:"B",ok:"bad",sc:-15,saved:false,
+       text:"With a likely basilar skull fracture, the NPA is the one airway you must NOT use here. Hard no.",
+       teach:"The classic NPA contraindication: suspected basilar skull fracture / midface trauma (raccoon eyes, Battle's sign, CSF). Pick the OPA."},
+     {l:"Assume overdose, give naloxone.",key:"C",ok:"mid",sc:-6,saved:false,
+       text:"You anchor on 'looks like an OD' and miss the trauma staring you in the face. Naloxone does nothing for a head bleed.",
+       teach:"Altered isn't always opioids. The bruising and CSF leak scream trauma \u2014 don't anchor on the easy story."}
+   ]}
+];
+
+/* ===================== ROAD HAZARDS (favor Engineer/AO) ===================== */
+const ROADS=[
+  {title:"POTHOLE",who:"THE TRAIL",scene:"A pothole the size of a kiddie pool swallows the front end. Something underneath goes CLUNK in a way that costs money."},
+  {title:"THE SPEED BUMP THAT SWORE AT YOU",who:"THE TRAIL",scene:"Turns out someone was napping in the road. He is now upright, completely fine, extremely loud \u2014 and your leaf springs are not fine."},
+  {title:"WHEEL-WELL SURPRISE",who:"THE TRAIL",scene:"You roll through something a dog (you hope it was a dog) left behind. It is now packed into the wheel well and the smell is a war crime."},
+  {title:"MATTRESS IN THE ROADWAY",who:"THE TRAIL",scene:"A discarded mattress wraps itself around the driveshaft like spaghetti on a fork. You are now towing a bed."},
+  {title:"SHOPPING-CART JOUSTING",who:"THE TRAIL",scene:"A runaway cart full of cans T-bones the rig. The cart loses, but the bumper's hanging and a panel's flapping."},
+  {title:"OLD FAITHFUL",who:"THE RIG",scene:"The temperature gauge erupts at a red light and steam geysers from under the hood."}
+];
+function resolveRoad(){
+  if(S.flags.fixer){
+    return {tone:"good",sc:5,text:(S.cls==='engineer'?"Pete pops the hood, does something arcane with a zip tie and a prayer, and you're rolling in ninety seconds. This is his entire personality and today it pays off.":"You don't even flinch \u2014 a couple of practiced moves with the tools you actually know how to use, and the rig's good. Truckies fix things. Loudly."),
+      teach:"Half this job is logistics and luck. The Engineer and AO exist for exactly this \u2014 every seat on the rig earns its keep somewhere."};
+  }
+  let who = (S.cls==='captain')?"The captain stares at the engine like it owes him paperwork":(S.cls==='attendant'?"Ray offers to take its blood pressure":"Dave knows a shortcut, not a socket wrench");
+  return {tone:"mid",sc:-6,text:who+". Nobody on this rig can turn a wrench, so you wait on a mechanic while two calls hold. This is the dysentery of the fire service.",
+    teach:"Medical seats (captain & EMTs) are useless with a busted rig \u2014 which is the whole argument for a balanced crew. Note who you wish you'd brought."};
+}
+
+/* ===================== SCAVENGE (funny +supply) ===================== */
+const SCAVS=[
+  {title:"WASTE NOT",who:"THE ALLEY",scene:"You pass a long-gone patient the coroner hasn't reached yet. There's a perfectly good OPA still seated in him. The kit's expensive and the budget's brutal...",item:"opa",qty:1,
+    take:"You... reclaim it. Wipe it off. Mostly. +1 OPA, and a memory you'll take to the grave.",leave:"You leave it. Some lines even San Julian won't cross. Respect.",
+    teach:"In real life that's a hard no \u2014 single-use, contaminated, period. The gag is the point; the lesson is the opposite."},
+  {title:"NOSE GOBLIN",who:"THE ALLEY",scene:"Same grim luck \u2014 an NPA still in place, and you're fresh out.",item:"npa",qty:1,
+    take:"In the pocket it goes. You're not proud. +1 NPA.",leave:"Hard pass. You have standards. Two of them.",
+    teach:"Reused airway adjuncts are an infection-control nightmare. Funny in a game, never in a rig."},
+  {title:"THE NARCAN FAIRY",who:"HARM REDUCTION VAN",scene:"A harm-reduction van is handing out free naloxone kits to anyone who'll take one. The volunteer makes eye contact and gestures at the bowl.",item:"naloxone",qty:2,
+    take:"You take a polite fistful. +2 Naloxone. The volunteer says 'stay safe out there' and means it.",leave:"You wave it off. The OD on call 7 will feel that decision.",
+    teach:"Community naloxone distribution genuinely saves lives \u2014 this one's both funny AND true."},
+  {title:"BUMPER TREASURE",who:"THE PARKING LOT",scene:"The off-going crew left a BVM sitting on your bumper. It's been there long enough to have a tan.",item:"bvm",qty:true,
+    take:"Finders keepers. +1 BVM. Engine 99 will figure it out.",leave:"You leave it for them, like a saint. A poorly-equipped saint.",
+    teach:"Always check your rig at shift change \u2014 the gear you assume is there sometimes isn't."},
+  {title:"GRANDMA'S STASH",who:"THE PORCH",scene:"After a call, the family insists you take Grandpa's spare, unexpired EpiPen 'so it doesn't go to waste.'",item:"epi",qty:1,
+    take:"You accept it for training... and the game. +1 Epi.",leave:"You decline gracefully. Scope is scope.",
+    teach:"You assist with a patient's OWN pen \u2014 you don't pocket other people's prescriptions. Wink."},
+  {title:"JUICE BOX BANDIT",who:"THE GUTTER",scene:"An untouched bag of glucose tabs and three juice boxes, abandoned by a vending machine.",item:"glucose",qty:2,
+    take:"Sugar acquired. +2 Oral Glucose. The juice boxes are for 'morale.'",leave:"You walk past, strong of will, weak of inventory.",
+    teach:"Oral glucose only goes to patients who can swallow and protect their airway \u2014 not the unconscious."},
+  {title:"DROPPED STRIPS",who:"THE SIDEWALK",scene:"An unopened, sealed box of test strips someone fumbled outside the pharmacy. Same brand as your meter.",item:"strips",qty:3,
+    take:"Sealed and sterile \u2014 fair game. +3 Strips.",leave:"You leave it. Bold choice for someone who skipped the strip aisle.",
+    teach:"Strips and lancets are single-use \u2014 sealed and in date only. A meter with no strips is a paperweight."},
+  {title:"THE GLOVE BOX",who:"THE RIG",scene:"You find a forgotten tube of water-based lube rattling around the cab from who-knows-when.",item:"lube",qty:1,
+    take:"Into the bag. NPAs everywhere rejoice. +1 Lube.",leave:"You leave the mystery lube where it lies. Wise.",
+    teach:"Always lube an NPA \u2014 dry insertion shreds the nasal passage. Now you've got some."}
+];
+
+/* ===================== CREW CHECKS (captain's eye) ===================== */
+const CREWCHECKS=[
+  {title:"WRONG SIZE",scene:"Your medic reaches for what's clearly a too-large OPA on a small woman in a tent with shallow respirations. He's about to insert it.",
+   correction:"Quietly: 'try the smaller one.' He swaps it without a beat \u2014 crew morale stays high, the airway seats clean.",
+   error:"Nobody catches it. The oversized OPA seats wrong, presses the epiglottis, and obstructs worse than the tongue did. Reset everything; time lost.",
+   teach:"OPA sizing is the most common silent error on chaotic scenes. A captain's job is to see what hands are missing."},
+  {title:"NALOXONE BEFORE AIRWAY",scene:"On a tent-encampment OD, your driver is about to give the intranasal naloxone before anyone's opened the airway or set up the BVM.",
+   correction:"'Airway first.' He freezes, ventilates, then pushes the Narcan. Clean save.",
+   error:"Naloxone goes in, nobody's ventilating, the patient gasps and aspirates. Now you've got two problems.",
+   teach:"Ventilation comes FIRST in opioid OD \u2014 naloxone is the assist, not the save. Captains catch this when the adrenaline takes over."},
+  {title:"GLUCOSE INTO A FADING PATIENT",scene:"Your attendant is putting oral glucose paste into a homeless diabetic who's drifting off and losing his gag reflex.",
+   correction:"'Hands off the mouth.' You stop him before the airway becomes the new problem.",
+   error:"Glucose goes in, patient aspirates as he loses his airway. Hypoglycemia partly treated, aspiration earned.",
+   teach:"Oral glucose only for patients who can swallow AND protect their airway. The line is the gag reflex \u2014 watch for it slipping."},
+  {title:"BARE HANDS",scene:"Your engineer is mid-skill on a bloody scene under the freeway and you realize his gloves never went on.",
+   correction:"'Gloves \u2014 now.' He pauses, dons them, keeps working. BSI restored before anything bad happens.",
+   error:"He keeps working bare-handed. The needle-stick incident report is going to be a whole thing.",
+   teach:"BSI isn't optional. A captain who notices a missing glove can save a needlestick \u2014 and possibly a career."}
+];
+
+/* ===================== CONTAMINATION (engineer's water) ===================== */
+const FILTHS=[
+  {title:"COVERED",scene:"Patient under the freeway bridge hasn't left his tent in days \u2014 covered head-to-toe in his own waste. You can smell it 30 feet out.",
+   fixText:"You crack the tank line and hose him (and your boots) down before transport. Engineer perk: water on the rig solves problems other crews can't.",
+   noFixText:"You wrap him in a sheet, hold your breath, and load him. The contamination smell stays in the rig the rest of the shift; the crew is openly miserable.",
+   teach:"Engines carry water for exactly this reason \u2014 decontamination on scene saves your patient compartment AND your crew's morale."},
+  {title:"STEP IN IT",scene:"You step squarely into something a dog absolutely did not leave behind \u2014 in front of a row of tents on San Julian. It is everywhere.",
+   fixText:"You rinse it off the rig and the boots before you roll. Pete grumbles. Pete has water.",
+   noFixText:"You scrape, swear, and roll on with it still on you. The smell is now part of the shift.",
+   teach:"Skid Row scenes are biohazards at boot level. The engine's water tank is your friend."},
+  {title:"BIOHAZARD TENT",scene:"Patient inside an encampment tent is coated in vomit, urine, and something unidentifiable that smells worse than both. Your boots stick to the ground.",
+   fixText:"Tank water, a tarp, and a hosedown before he gets near the rig. Crew's still gagging but the compartment stays clean.",
+   noFixText:"You load him as-is. The compartment is now a problem for the next shift. Crew morale tanks.",
+   teach:"A clean patient compartment is an infection-control issue, not a comfort one. Decon on scene when you can."}
+];
+
+/* ===================== LOCKED ACCESS (AO's irons) ===================== */
+const BARRIERS=[
+  {title:"LOCKED SRO",scene:"Patient unresponsive inside a chained SRO room on Main. Manager can't find the master key; neighbors say he hasn't moved since yesterday.",
+   feText:"You break out the irons and pop the lock in 90 seconds flat. Door open. Truckie's day.",
+   noFeText:"You wait on the truck or PD. Eight minutes pass. The patient is found in arrest. There's nothing you could've done in those eight minutes that you couldn't have done in ninety seconds.",
+   teach:"Forcible entry on a known unresponsive patient is time-critical. The AO is who you call \u2014 'wait for fire' costs minutes you don't have."},
+  {title:"CHAINED LOT",scene:"Caller behind a 10-foot fence around an encampment lot off 5th. Gate padlocked, nobody has the combo. You can hear someone moaning inside.",
+   feText:"Bolt cutters on the padlock in under a minute. In you go.",
+   noFeText:"You wait for the truck. The moaning stops before they arrive. Bad luck \u2014 or bad staffing.",
+   teach:"A locked gate between you and a moaning patient is a forcible-entry situation. Don't wait politely."},
+  {title:"AIRBNB LOCKBOX",scene:"Tourist trapped in his cheap Airbnb after the lockbox malfunctioned, panic attack on the other side of the door. He came for the Dodger game; he is having second thoughts.",
+   feText:"One controlled kick at the deadbolt and you're in. He's mortified and grateful.",
+   noFeText:"You spend 15 minutes on the phone with the property manager while the 'panic attack' escalates. Now it's a real call.",
+   teach:"A locked door between you and an anxious patient becomes a real medical call the longer you wait. AOs solve doors."},
+  {title:"PINNED IN THE CAR",scene:"Concert-goer couple clipped a parked car on 6th after the show. She's pinned, conscious but trapped; doors won't budge.",
+   feText:"You crack the door with the irons and the spreader; she's out in two minutes.",
+   noFeText:"You wait on extrication. By the time she's out, ALS has cancelled because nobody can reach her to assess.",
+   teach:"You cannot treat what you cannot reach. Forcible entry is patient care, not just truckie theatrics."}
+];
+
+/* ===================== CATASTROPHIC EVENTS (one-shot, starts BBP clock) ===================== */
+const CATAS=[
+  {kind:"steal",title:"AMBULANCE BORROWED",scene:"While you're treating, an enterprising local hops in the cab and rolls. Three blocks later PD catches him \u2014 but the rig's at impound and you're walking back to S&M."},
+  {kind:"steal",title:"JOYRIDE",scene:"You hear an engine fire up behind you. Someone is touring your apparatus through downtown. PD recovers it three intersections later, dented but drivable. Long walk back."},
+  {kind:"needle",title:"NEEDLE STICK",scene:"You feel the sting through the glove \u2014 a contaminated sharps in the alley you didn't see. Treatment is available at the ED. The clock starts now."},
+  {kind:"needle",title:"BLOODBORNE",scene:"A needle in a homeless camp's loose trash punches through your boot AND your foot. Bleeding. It's a one-way trip if you don't make quarters in time."},
+  {kind:"needle",title:"ARTERIAL SPRAY",scene:"You release a tourniquet to assess and the wound pumps a hot red arc directly into your right eye. The patient's bracelet reads HIV+ in faded sharpie. The clock starts now."},
+  {kind:"needle",title:"SHARP THROUGH TWO GLOVES",scene:"You reach into a known IVDU's backpack to find his ID and a hypodermic punches through both gloves and your palm. Source: unknown. Hep status: unknown. The PEP window is not unknown."}
+];
+
+/* ===================== SKID ROW CALLS (homeless-focused, fire near quarters) ===================== */
+const SKIDCALLS=[
+  {id:"skid_sepsis",crewCan:true,direct:"vitals look septic \u2014 get him out of the tent, sugar, high-flow O2, expedite to ALS or transport",
+   title:"\u201cFEVER IN A TENT\u201d",who:"OUTREACH",
+   sceneVars:[
+     "Outreach worker dragged you to a tent on San Pedro. Patient hasn't moved in three days. Hot to touch through gloves, mumbling, smells septic.",
+     "Encampment manager flagged you at 5th & Crocker. Inside the tent: a man face-down in a sleeping bag, fever you can feel from a foot away, ammonia-sour smell.",
+     "You crouch into a tent flap. Smell hits first \u2014 sweet-sour rot. Patient is awake, sort of, eyes glazed, skin radiating heat. He hasn't drunk water in two days."
+   ],
+   q:"What's the play?",qVars:["What's the play?","First move?","Where do your hands start?"],
+   options:[
+     {l:"Pull him out into the open. Vitals, sugar, high-flow O2, expedite to ALS / transport.",key:"A",ok:"good",sc:8,saved:true,transport:true,
+      text:"You get him out and on the gurney. BGL 220, HR 130, BP 78/40, temp 103. Classic encampment urosepsis or wound source. ALS packages him for the ED.",
+      teach:"Sepsis from untreated skin/UTI/pneumonia is the #1 killer in encampments. You can't assess a hot, hypotensive patient on a tent floor. Move them, treat them, transport them."},
+     {l:"Stay inside the tent and assess on the floor.",key:"B",ok:"mid",sc:-4,saved:false,
+      text:"Folded over in 4 feet of headroom, you miss the BP and the cap refill. He decompensates while you're still kneeling.",
+      teach:"You can't assess what you can't see. Septic patients get moved to clean, lit space \u2014 the tent is contamination AND a dark room."},
+     {l:"Wake him, ask if he's okay, leave a referral card.",key:"C",ok:"bad",sc:-12,saved:false,
+      text:"He nods, mumbles, signs nothing. He codes by morning. The case manager who flagged him kept your unit number for QA.",
+      teach:"Refusal to engage with frequent flyers is the easiest way to miss true sepsis. The 90th call IS sometimes the emergency. Assess every time."}
+   ]},
+  {id:"skid_abscess",crewCan:true,direct:"don't drain it in the field \u2014 dry dressing, supportive positioning, transport for ED I&D",
+   title:"\u201cARM THE SIZE OF A FOOTBALL\u201d",who:"BYSTANDER",
+   sceneVars:[
+     "Patient against a dumpster on Crocker. Left forearm: purple, glossy, swollen to twice the right, red streaks tracking to his elbow.",
+     "Encampment flag-down, wants \u201csomething for the pain.\u201d Fist-sized abscess weeping yellow at the antecubital fossa. Smells the way you'd expect.",
+     "IV-drug user, 30s, asks for transport. The injection site has eaten the soft tissue around it. Whole forearm is hot, hard, the size of his thigh."
+   ],
+   q:"What's your move?",qVars:["What's your move?","First action?","How do you handle this?"],
+   options:[
+     {l:"Dry sterile dressing, sling, supportive positioning, transport for I&D.",key:"A",ok:"good",sc:7,saved:true,transport:true,
+      text:"You bandage clean, support the arm, roll. ED drains it under sterile light. Your gloves and the stretcher cover both go in the red bag on return.",
+      teach:"Field I&D of a Skid Row abscess is a fast path to sepsis, exposure, and a complaint. Dressing + transport is the textbook play."},
+     {l:"Field I&D \u2014 get the pressure off, he'll feel better fast.",key:"B",ok:"bad",sc:-10,saved:false,
+      text:"A purulent geyser hits your face shield, your scope, and the rig wall. No sterile setup, no proper light, no authority. Just contamination and a write-up.",
+      teach:"I&D is an OR/ED procedure. Pressure relief is real, but exposure risk and contamination outweigh it on a Skid Row sidewalk."},
+     {l:"Tell him to soak it in warm water and call back if it worsens.",key:"C",ok:"bad",sc:-8,saved:false,
+      text:"You leave a soft-tissue infection already tracking proximally. He's septic by morning, and you owned the encounter.",
+      teach:"A hot, hard, tracking infection is a transport call, not a wait-and-see. Sepsis loves a refused EMS contact."}
+   ]},
+  {id:"skid_drunk_plus",crewCan:true,direct:"he's not just drunk \u2014 check a sugar and look for the second problem",
+   title:"\u201cANOTHER ONE OUTSIDE THE LIQUOR STORE\u201d",who:"PD ON SCENE",
+   sceneVars:[
+     "PD called you for \u201canother drunk\u201d outside the Crocker liquor store. He's snoring, smells like Olde English \u2014 but his pupils are unequal.",
+     "Sidewalk patient, mid-50s, smells like a brewery, won't wake to sternal rub. PD says he's a frequent flyer; today he's WORSE than usual.",
+     "Familiar face on the curb at 6th & San Pedro. Out cold. Officer says \u201cthis is normal for him.\u201d His skin temp and his pupils disagree."
+   ],
+   q:"How do you proceed?",qVars:["How do you proceed?","First move?","Where do you start?"],
+   options:[
+     {l:"Full assessment \u2014 ABCs, BGL, pupils, head exam. Treat what you actually find.",key:"A",ok:"good",sc:9,saved:true,transport:true,
+      text:"BGL 38. He's drunk AND hypoglycemic AND has a head bleed from a fall nobody saw. The smell almost cost a life. Glucose, transport, ED stroke team standing by.",
+      teach:"Alcohol MASKS hypoglycemia, head injury, stroke, sepsis. It doesn't cause them \u2014 it hides them. Always check sugar. Always check pupils."},
+     {l:"Wake him, confirm he's drunk, hand back to PD.",key:"B",ok:"bad",sc:-12,saved:false,
+      text:"He's tubed by morning with anoxic brain injury \u2014 hypoglycemic AND head-injured AND intoxicated. Everyone, including you, assumed the alcohol explained everything.",
+      teach:"'Frequent flyer' is a pattern, not an assessment. Every contact gets a full workup, every time."},
+     {l:"Sternal rub until he wakes, get a signed refusal.",key:"C",ok:"mid",sc:-5,saved:false,
+      text:"He swats at you, slurs \u201cm'fine,\u201d and signs a scribble. The pupil asymmetry you didn't check is still there.",
+      teach:"AMS + altered = NOT a competent refusal. You're documenting your way into a wrongful-death suit."}
+   ]},
+  {id:"skid_hypothermia",crewCan:true,direct:"out of the wet, off the cold ground, dry layers, gentle handling \u2014 and watch for after-drop",female:false,
+   title:"\u201cCOLD AND WET, UNDER CARDBOARD\u201d",who:"BYSTANDER",
+   sceneVars:[
+     "Cardboard mattress under an awning on 5th. Rain ended an hour ago. Patient curled fetal, wet coat, slow to answer, skin cold to the elbow.",
+     "Rainy night, encampment washed out. Patient under soaked cardboard. Shivering wave already passed \u2014 now he's still and slow.",
+     "Wet, cold, slow to respond. You can see his breath. He hasn't stopped shaking but the shake is uncoordinated now \u2014 that's bad."
+   ],
+   q:"First move?",qVars:["First move?","Where do you start?","What's the play?"],
+   options:[
+     {l:"Strip wet layers, dry blanket, into the warm rig, gentle handling, transport.",key:"A",ok:"good",sc:8,saved:true,transport:true,
+      text:"Wet clothes off, warm dry layers on, heater cranked, no jostling. Core temp's coming up by the ED ramp. No arrest.",
+      teach:"Wet clothes wick heat 25\u00d7 faster than air. Step one of every hypothermia: dry. Rough handling on a cold heart triggers V-fib \u2014 gentle is not a preference, it's protocol."},
+     {l:"Pile dry blankets over the wet clothes, start rolling.",key:"B",ok:"mid",sc:-3,saved:false,
+      text:"He keeps cooling under the wet layer. Better than nothing, worse than the right answer.",
+      teach:"Dry blankets over wet clothes is just insulating cold water against skin. The clothes have to come off first."},
+     {l:"Shake him awake, walk him to the warm jump seat.",key:"C",ok:"bad",sc:-10,saved:false,
+      text:"Rough movement on a severely hypothermic patient triggers V-fib. He arrests in your jump seat. ALS works the code en route.",
+      teach:"Hypothermic hearts are electrically unstable. Vertical positions and rough movement = arrest. Horizontal, gentle, warm \u2014 every time."}
+   ]}
+];
+
+/* ===================== OCCUPATIONAL EXPOSURES (Oregon-Trail-style \"diseases\") ===================== */
+const EXPOSURES=[
+  {title:"SPLASH ZONE",who:"THE AIRWAY",
+   scene:"Patient gags on the OPA and projectile-vomits an arm's length of bile directly into your right eye. Goggles? Meant to grab a pair before the shift.",
+   sickAdd:2,heatAdd:1,sc:-4,
+   teach:"Mucous membranes (eyes, nose, mouth) are a real BBP exposure route. Eye protection is mandatory on EVERY airway call \u2014 vomit doesn't ask."},
+  {title:"FECAL FLOOR",who:"THE TENT",
+   scene:"You kneel to assess. The tent floor isn't tent floor \u2014 it's a 3-inch reservoir of human waste that your right knee has just broken the surface tension of. You feel it climb the cuff.",
+   sickAdd:2,heatAdd:1,sc:-5,
+   teach:"Oral-fecal route = Hep A, c. diff, norovirus. Bag your pants in the rig, shower at quarters, do not eat until you do."},
+  {title:"OPEN-MOUTH COUGH",who:"THE PATIENT",
+   scene:"While you're bagging at two feet, his cough lifts the mask seal and aerosols a respiratory infection across your bottom lip. He coughs again in case you missed it.",
+   sickAdd:1,heatAdd:0,sc:-3,
+   teach:"Cough + close range = significant TB and influenza exposure. N95 is the default at any cough call, not the upgrade."},
+  {title:"VOMIT MOUTH",who:"THE BVM SEAL",
+   scene:"You're holding a two-hand mask seal when he coughs hard. Seal lifts. Your bottom lip is in the line of fire. Something warm enters your mouth. You will think about this every meal this week.",
+   sickAdd:2,heatAdd:1,sc:-5,
+   teach:"Suction READY before every airway. Side-lying if possible. Oral exposure to GI contents is a Hep A / norovirus jackpot you don't want to hit."},
+  {title:"BEDBUG STOWAWAYS",who:"YOUR SLEEVE",
+   scene:"As you load him onto the gurney, you watch a single tiny brown speck crawl from his collar onto your sleeve. Then a second. You will see them in your bunk by Tuesday.",
+   sickAdd:1,heatAdd:1,sc:-3,
+   teach:"Bedbug transfer is constant in Skid Row. Gurney plastics, bag your uniform on RTQ, hot-water everything, and the rig goes out for fumigation."},
+  {title:"SCABIES SOUVENIR",who:"YOUR FOREARM",
+   scene:"You felt skin-to-skin contact through your gown. Two weeks from now you'll Google a wrist-and-waist rash pattern that looks like an encampment subway map. You'll know before you finish the article.",
+   sickAdd:1,heatAdd:0,sc:-3,
+   teach:"Scabies transmits skin-to-skin. Long sleeves below the wrist, gown if available. The itch is the easy part; the prescription is the hard part."},
+  {title:"MRSA HANDSHAKE",who:"THE WOUND",
+   scene:"Your last glove tore mid-pack. You finished the dressing bare-handed because the call wasn't going to wait. Three days from now: a familiar pink-edged red spot on your knuckle.",
+   sickAdd:1,heatAdd:0,sc:-3,
+   teach:"MRSA is endemic in encampments. A torn glove is not a small thing \u2014 stop, re-glove, restart. The wound waits three seconds."},
+  {title:"LICE METROPOLIS",who:"THE BEANIE",
+   scene:"You lift his beanie to check a head lac and the inside of the brim looks like CGI. You watched at least three move toward you. Your hair feels itchier already.",
+   sickAdd:1,heatAdd:0,sc:-2,
+   teach:"Lice transmit by direct contact and shared head coverings. Hair tied back, head cover under helmet, decon after."},
+  {title:"BACK POP",who:"THE LIFT",
+   scene:"Lifting a 260-lb patient off the alley floor solo because your partner couldn't get there in time \u2014 you feel the wet snap deep in your lumbar spine. You can still walk. For now.",
+   sickAdd:1,heatAdd:2,sc:-6,
+   teach:"Lumbar injury is the #1 EMS career-ender. Wait for hands. Use the bariatric. Form over speed, every single time."},
+  {title:"FOAM PARTY",who:"THE OD",
+   scene:"Naloxone is in. Patient froths pink from the nose as you BVM. The aerosol clears the top of your face shield and lands on your forehead.",
+   sickAdd:1,heatAdd:0,sc:-3,
+   teach:"Pulmonary edema + opioid OD = bloody aerosol every breath. Full face shield, every OD, every time."},
+  {title:"DOG WITH OPINIONS",who:"THE TENT",
+   scene:"Patient's untreated street dog has decided you are the bigger threat. Your forearm has a new set of puncture marks. The dog and the patient look equally surprised.",
+   sickAdd:1,heatAdd:1,sc:-4,
+   teach:"Encampment dogs are unvaccinated more often than not. Rabies risk is real. Wound + ED report + animal control = mandatory."},
+  {title:"HEP A WATER",who:"THE WATER BOTTLE",
+   scene:"You shared a sip from the water bottle in the rig. The water bottle was on the bench. The bench is where the last patient was. The math, in retrospect, is unkind.",
+   sickAdd:1,heatAdd:0,sc:-3,
+   teach:"Hep A on Skid Row is endemic. Hand-wash before any contact with your own face, your own food, your own water bottle."},
+  {title:"FENTANYL DUST",who:"THE BAG",
+   scene:"You move the patient's backpack and a fine white powder puffs up and settles on your inner forearm and chin. You don't feel anything. Probably nothing. You stop touching your face for two hours.",
+   sickAdd:1,heatAdd:1,sc:-3,
+   teach:"Casual skin contact with fentanyl is overhyped \u2014 but powder + sweat + mucous membrane is a different story. Decon and call poison control if any symptoms appear."},
+  {title:"URINE GRAFFITI",who:"THE CURB",
+   scene:"Kneeling at the curb to assess, you feel warm liquid soak through your pant knee. It is not water. The patient was kind enough to apologize.",
+   sickAdd:1,heatAdd:0,sc:-2,
+   teach:"Skid Row puddles aren't water. Knee pads exist. Bag the uniform on RTQ. The shower is mandatory, not optional."}
+];
+
+/* ===================== RIPPLES (consequences that alter your next stop) ===================== */
+const RIPPLES={
+  good:[
+    {title:"DISPATCH NOTICES",effect:"clean radio narrative, supervisor flagged it positive. Patrol catches a breather.",prog:0,heat:-1,sc:3},
+    {title:"FAMILY THANKS YOU",effect:"the patient's daughter chases you down with bottled water and a card.",prog:2,heat:0,sc:4,morale:1},
+    {title:"OUTREACH WORKER TIPS",effect:"case manager radios you ahead about the next encampment patient — you're already half-packaged.",prog:4,heat:0,sc:0},
+    {title:"STREET RESPECT",effect:"encampment regular nods you in next time. The doors open faster.",prog:0,heat:0,sc:5},
+    {title:"RIG STAYS CLEAN",effect:"no decon stop. You roll straight into the next call.",prog:4,heat:0,sc:0},
+    {title:"QA HIGH-FIVE",effect:"the supervisor catches your run sheet narrative on review. Bonus on the report.",prog:0,heat:0,sc:6},
+    {title:"PD COVERS YOU",effect:"the officer who watched your work clears your next scene before you arrive.",prog:3,heat:-1,sc:0},
+    {title:"WALK-AROUND ON THE HOUSE",effect:"the patient's neighbor hands you a sealed water-bottle case for the rig. Restock for free.",prog:0,heat:0,sc:0,scav:true}
+  ],
+  bad:[
+    {title:"BYSTANDER PHONE FOOTAGE",effect:"the clip is already on social. Dispatch piles on, the radio gets busy.",prog:0,heat:1,sc:-3},
+    {title:"FAMILY FOLLOW-UP",effect:"they're calling your captain. Plan to explain yourself next shift.",prog:0,heat:0,sc:-6},
+    {title:"DECON DELAY",effect:"you have to swing through the station to wash off something. Time lost.",prog:-3,heat:1,sc:0},
+    {title:"COUSIN ON SCENE",effect:"word travels fast in the encampment. Next call gets hostile before you arrive.",prog:0,heat:1,sc:-4},
+    {title:"RUMOR MILL",effect:"Skid Row regulars start refusing your unit. Doors stay locked.",prog:-2,heat:1,sc:0},
+    {title:"CAPTAIN CALLS YOU OVER",effect:"your supervisor wants to talk about that one later. Document everything.",prog:0,heat:0,sc:-6},
+    {title:"GLOVES DOWN",effect:"you're missing a pair after that scramble. (-1 gloves)",prog:0,heat:0,sc:-2,inv:'gloves',invDelta:-1},
+    {title:"BACK-OF-BOX MISCOUNT",effect:"the OPA kit's lighter than you thought. Probably left one on scene. (-1 OPA)",prog:0,heat:0,sc:0,inv:'opa',invDelta:-1}
+  ]
+};
+
+let S=null; const app=document.getElementById('app');
+
+/* ---- NAV BAR (back / home buttons above the screen) ---- */
+let __screen=null;
+function setScreen(name){
+  __screen=name;
+  let nav=document.getElementById('nav');
+  let back=document.getElementById('back-btn');
+  let home=document.getElementById('home-btn');
+  if(!nav||!back||!home) return;
+  let showBack=['select','store','confirmStart'].includes(name);
+  let showHome=!['title','boot','learn'].includes(name);
+  back.style.display = showBack?'inline-block':'none';
+  home.style.display = showHome?'inline-block':'none';
+  nav.style.display  = (showBack||showHome)?'flex':'none';
+}
+function navBack(){
+  if(__screen==='select') return titleScreen();
+  if(__screen==='store') return selectScreen();
+  if(__screen==='confirmStart') return storeScreen();
+}
+function navHome(){
+  S=null;
+  titleScreen();
+}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function render(h){app.innerHTML='<div class="fadein">'+h+'</div>';window.scrollTo(0,0);}
+
+/* Patient demographic + scene randomization for genuine variety every run */
+function makeDemo(call){
+  let g = call && call.female ? 'f' : 'm';
+  let lo = (call && call.ageMin) || 22, hi = (call && call.ageMax) || 65;
+  return { age: lo + Math.floor(Math.random()*(hi-lo+1)), male: g==='m' };
+}
+function applyTokens(str, demo){
+  if(!str) return str;
+  return str.replace(/\{age\}/g, demo.age);
+}
+function letterOf(i){ return String.fromCharCode(65+i); }
+
+const HEAT_CAP=7;
+/* Morale tiers — each star tier has a distinct, named benefit/penalty.
+   Easy to lose (bad calls drop you fast), slower to climb. Universal across classes. */
+const MORALE_TIERS=[
+  {stars:0,label:"MUTINY",   color:"#d96461",desc:"Crew shut down. +1 holding per call.",       progPerStop:0, scorePerCall: -2, heatPerCall:1},
+  {stars:1,label:"TIRED",    color:"#a08854",desc:"Bare minimum. Small score penalty.",          progPerStop:0, scorePerCall: -1, heatPerCall:0},
+  {stars:2,label:"STEADY",   color:"#a08854",desc:"Neutral. No bonus, no penalty.",              progPerStop:0, scorePerCall:  0, heatPerCall:0},
+  {stars:3,label:"ENGAGED",  color:"#e0b85a",desc:"+2% home per stop.",                          progPerStop:2, scorePerCall:  0, heatPerCall:0},
+  {stars:4,label:"SHARP",    color:"#9cc07e",desc:"+4% home per stop · +2 pts per call.",        progPerStop:4, scorePerCall:  2, heatPerCall:0},
+  {stars:5,label:"LOCKED IN",color:"#9cc07e",desc:"+6% home per stop · +4 pts per call · crew catches errors.",progPerStop:6, scorePerCall: 4, heatPerCall:0}
+];
+function newState(cls){
+  let inv={}; COUNTS.forEach(k=>inv[k]=0); BOOLS.forEach(k=>inv[k]=false);
+  if(CLASSES[cls].flags.improv) inv.strips=1; // Engineer perk
+  let alloc=CLASSES[cls].budget + (Math.floor(Math.random()*7)-1)*10; // city deficit roll (skews positive)
+  return {cls,flags:CLASSES[cls].flags,mult:CLASSES[cls].mult,budget:alloc,baseAlloc:alloc,inv,
+    progress:0,backlog:1,stopCount:0,recent:[],peakHeat:1,current:null,score:0,saved:0,lost:0,
+    sick:0,justStuck:false,catFired:false,route:null,routeChosen:false,routeChanged:false,exposed:0,expoLog:[],morale:(cls==='attendant'?5:(cls==='captain'?2:0)),scavenged:0};
+}
+
+/* ---- LOGO (inline SVG) ---- */
+const LOGO_SVG = `<svg class="logo-rig" viewBox="0 0 120 58" shape-rendering="crispEdges" aria-label="Rescue ambulance">
+  <!-- ground shadow -->
+  <rect x="6" y="54" width="108" height="1" fill="#3a2c1f" opacity="0.55"/>
+  <!-- lightbar housing on top of cab -->
+  <rect x="74" y="14" width="34" height="2" fill="#1c1710"/>
+  <rect x="74" y="10" width="34" height="4" fill="#1c1710"/>
+  <rect x="74" y="10" width="34" height="1" fill="#3a2c1f"/>
+  <!-- lightbar lenses: 5 red segments, alternating L/R flash -->
+  <rect class="lb-l" x="76" y="11" width="5" height="3" fill="#ff3a3a"/>
+  <rect class="lb-r" x="82" y="11" width="5" height="3" fill="#ff3a3a"/>
+  <rect class="lb-c" x="88" y="11" width="6" height="3" fill="#ff5050"/>
+  <rect class="lb-l" x="95" y="11" width="5" height="3" fill="#ff3a3a"/>
+  <rect class="lb-r" x="101" y="11" width="5" height="3" fill="#ff3a3a"/>
+  <!-- PATIENT BOX (white body) -->
+  <rect x="4" y="16" width="68" height="34" fill="#f3edde"/>
+  <rect x="4" y="16" width="68" height="1" fill="#ffffff"/>
+  <rect x="4" y="49" width="68" height="1" fill="#a8a08a"/>
+  <!-- red waist stripe across box -->
+  <rect x="4" y="28" width="68" height="4" fill="#c94e4b"/>
+  <rect x="4" y="28" width="68" height="1" fill="#e06664"/>
+  <!-- red lower band (chevron area) -->
+  <rect x="4" y="44" width="68" height="6" fill="#c94e4b"/>
+  <rect x="4" y="44" width="68" height="1" fill="#e06664"/>
+  <!-- chevron diagonal stripes on rear panel -->
+  <g fill="#f3edde">
+    <rect x="6" y="46" width="1" height="3"/>
+    <rect x="10" y="46" width="1" height="3"/>
+    <rect x="14" y="46" width="1" height="3"/>
+    <rect x="18" y="46" width="1" height="3"/>
+  </g>
+  <!-- box rear door divider -->
+  <rect x="38" y="17" width="1" height="27" fill="#a8a08a" opacity="0.6"/>
+  <!-- small rear windows -->
+  <rect x="10" y="20" width="10" height="5" fill="#0a1a12"/>
+  <rect x="10" y="20" width="10" height="1" fill="#1a3022"/>
+  <rect x="44" y="20" width="22" height="5" fill="#0a1a12"/>
+  <rect x="44" y="20" width="22" height="1" fill="#1a3022"/>
+  <rect x="46" y="21" width="3" height="1" fill="#3a8a64" opacity="0.5"/>
+  <!-- side flashers on box corners (front and rear) -->
+  <rect class="side-rr" x="5" y="17" width="3" height="3" fill="#ff3a3a"/>
+  <rect class="side-fr" x="68" y="17" width="3" height="3" fill="#ff3a3a"/>
+  <!-- side step under door -->
+  <rect x="36" y="50" width="22" height="2" fill="#1c1710"/>
+  <!-- CAB section (white upper, red lower waist) -->
+  <rect x="72" y="16" width="32" height="34" fill="#f3edde"/>
+  <rect x="72" y="16" width="32" height="1" fill="#ffffff"/>
+  <rect x="72" y="49" width="32" height="1" fill="#a8a08a"/>
+  <!-- cab waist red stripe (continuous with box) -->
+  <rect x="72" y="28" width="32" height="4" fill="#c94e4b"/>
+  <rect x="72" y="28" width="32" height="1" fill="#e06664"/>
+  <!-- cab lower red band -->
+  <rect x="72" y="44" width="32" height="6" fill="#c94e4b"/>
+  <rect x="72" y="44" width="32" height="1" fill="#e06664"/>
+  <!-- windshield -->
+  <rect x="74" y="18" width="26" height="9" fill="#0a1a12"/>
+  <rect x="74" y="18" width="1" height="9" fill="#1a3022"/>
+  <rect x="76" y="19" width="5" height="1" fill="#3a8a64" opacity="0.55"/>
+  <rect x="83" y="19" width="3" height="1" fill="#3a8a64" opacity="0.35"/>
+  <!-- A-pillar -->
+  <rect x="100" y="18" width="1" height="9" fill="#a8a08a"/>
+  <!-- cab side door window -->
+  <rect x="74" y="33" width="14" height="6" fill="#0a1a12"/>
+  <rect x="74" y="33" width="14" height="1" fill="#1a3022"/>
+  <!-- door handle -->
+  <rect x="76" y="41" width="5" height="1" fill="#3a2c1f"/>
+  <!-- side mirror -->
+  <rect x="104" y="20" width="3" height="6" fill="#1c1710"/>
+  <rect x="104" y="20" width="3" height="1" fill="#3a2c1f"/>
+  <!-- front grille -->
+  <rect x="101" y="33" width="8" height="8" fill="#1c1710"/>
+  <rect x="102" y="34" width="6" height="1" fill="#3a2c1f"/>
+  <rect x="102" y="36" width="6" height="1" fill="#3a2c1f"/>
+  <rect x="102" y="38" width="6" height="1" fill="#3a2c1f"/>
+  <rect x="102" y="40" width="6" height="1" fill="#3a2c1f"/>
+  <!-- headlights -->
+  <rect class="head-l" x="105" y="29" width="5" height="3" fill="#ffe9a8"/>
+  <rect x="105" y="29" width="5" height="1" fill="#ffffff"/>
+  <!-- front bumper -->
+  <rect x="100" y="48" width="12" height="3" fill="#1c1710"/>
+  <rect x="100" y="48" width="12" height="1" fill="#3a2c1f"/>
+  <!-- WHEELS -->
+  <g fill="#0a0a0a">
+    <rect x="12" y="49" width="18" height="6"/>
+    <rect x="13" y="48" width="16" height="1"/>
+    <rect x="12" y="55" width="18" height="1"/>
+  </g>
+  <rect x="17" y="51" width="8" height="3" fill="#3a2c1f"/>
+  <rect x="19" y="52" width="4" height="1" fill="#a8a08a"/>
+  <g fill="#0a0a0a">
+    <rect x="80" y="49" width="18" height="6"/>
+    <rect x="81" y="48" width="16" height="1"/>
+    <rect x="80" y="55" width="18" height="1"/>
+  </g>
+  <rect x="85" y="51" width="8" height="3" fill="#3a2c1f"/>
+  <rect x="87" y="52" width="4" height="1" fill="#a8a08a"/>
+</svg>`;
+
+/* ---- BOOT / LOADING ---- */
+function bootScreen(){
+  setScreen('boot');
+  const lines = [
+    {t:'> POWERING APPARATUS BUS .......... <span class="ok">[OK]</span>',d:240},
+    {t:'> RADIO LINK TO RC ................ <span class="ok">[OK]</span>',d:220},
+    {t:'> NARC SAFE ....................... <span class="ok">[SEALED]</span>',d:220},
+    {t:'> CREW ROSTER ..................... <span class="ok">[5 SEATS]</span>',d:220},
+    {t:'> SUPPLY MANIFEST ................. <span class="warn">[SHORT]</span>',d:300},
+    {t:'> ROUTE TO QUARTERS ............... <span class="warn">[CALC\u2026]</span>',d:600},
+    {t:'> SCOPE OF PRACTICE ............... <span class="ok">[BLS / EMT]</span>',d:300},
+    {t:' ',d:120},
+    {t:'<span class="ok">SHIFT INITIALIZED.</span>',d:500}
+  ];
+  render(`<div class="boot">
+    <div class="boot-head">RESCUE 8 0 0 \u00b7 PRE-SHIFT BOOT</div>
+    <div class="boot-rule"></div>
+    <div class="boot-out" id="boot-out"></div>
+    <div class="boot-bar"><div class="boot-bar-fill" id="boot-bar-fill"></div></div>
+    <div class="boot-bar-pct" id="boot-bar-pct">0%</div>
+    <div class="boot-skip">TAP / ANY KEY TO SKIP</div>
+  </div>`);
+  let out=document.getElementById('boot-out');
+  let fill=document.getElementById('boot-bar-fill');
+  let pctEl=document.getElementById('boot-bar-pct');
+  let acc='';let i=0;let done=false;
+  function finish(){
+    if(done)return;done=true;
+    document.removeEventListener('click',skip);
+    document.removeEventListener('keydown',skip);
+    titleScreen();
+  }
+  function skip(){finish();}
+  function step(){
+    if(done)return;
+    if(i>=lines.length){fill.style.width='100%';pctEl.textContent='100%';setTimeout(finish,600);return;}
+    acc+=lines[i].t+'\n';
+    out.innerHTML=acc+'<span class="boot-cursor">_</span>';
+    let pct=Math.round((i+1)/lines.length*100);
+    fill.style.width=pct+'%';pctEl.textContent=pct+'%';
+    let d=lines[i].d;i++;setTimeout(step,d);
+  }
+  document.addEventListener('click',skip);
+  document.addEventListener('keydown',skip);
+  setTimeout(step,260);
+}
+
+/* ---- TITLE ---- */
+function titleScreen(){
+  setScreen('title');
+  render(`<h1>THE&nbsp; SAN&nbsp; JULIAN&nbsp; ST<br>TRAIL</h1>
+    <div class="sub">an EMT · BLS-scope expedition home</div>
+    ${LOGO_SVG}
+    <p class="center">You ran the rig dry. Now you're stuck at Supply &amp; Maintenance for an emergency restock \u2014 on whatever the broke city will give you. Your goal: get back to quarters.</p>
+    <p class="center small">Run clean calls and you close the distance home. Botch them and you get tied up while more calls stack up \u2014 stack too many and the shift swallows you whole.</p>
+    <div class="center">
+      <button class="start-btn" onclick="selectScreen()">PRESS&nbsp;START <span class="blink">_</span></button><br>
+      <button class="start-btn" style="font-size:11px;padding:10px 18px;margin-top:10px" onclick="learnScreen()">LEARN THE TRAIL</button>
+    </div>`);
+}
+function learnScreen(){
+  setScreen('learn');
+  render(`<h1 style="font-size:18px">LEARN THE TRAIL</h1>
+    <div class="sub">how to play the san julian st trail</div>
+
+    <div class="teach" style="text-align:left;margin-bottom:10px">
+      <span class="lbl">▸ THE SHIFT</span>
+      You're an EMT on Skid Row. The rig is dry, the budget's broke, dispatch already has calls holding. Restock at Supply &amp; Maintenance and make it back to quarters.
+    </div>
+
+    <div class="teach" style="text-align:left;margin-bottom:10px">
+      <span class="lbl">▸ EACH STOP</span>
+      A scene plays out. Pick the right answer. Right move closes the distance <b>HOME</b>. Wrong move adds calls to your <b>HOLDING</b> queue (max 7 = shift over).
+    </div>
+
+    <div class="teach" style="text-align:left;margin-bottom:10px">
+      <span class="lbl">▸ SKILLS &amp; TRANSPORTS</span>
+      Some answers trigger a skill walkthrough (OPA, NPA, naloxone, glucose, EpiPen) — pick each step by the book. Some patients require transport: most classes lose 30% distance and re-pick a route from the hospital. Diesel Dave skips that penalty.
+    </div>
+
+    <div class="teach" style="text-align:left;margin-bottom:10px">
+      <span class="lbl">▸ EVERYTHING COMPOUNDS</span>
+      Good calls can spawn helpful ripples (free supplies, less holding). Bad calls spawn nasty ones (lost gear, family complaints). Occupational exposures (splash, needle stick, bedbugs) stack up and dock your score.
+    </div>
+
+    <div class="teach" style="text-align:left;margin-bottom:10px">
+      <span class="lbl">▸ WIN &amp; SCORE</span>
+      Hit 100% home alive. Final score = decisions + patient saves + leftover budget + leftover supplies + scavenger finds, <b>× class multiplier</b>. Higher multiplier = harder class = higher ceiling.
+    </div>
+
+    <div class="teach" style="text-align:left;margin-bottom:10px">
+      <span class="lbl">▸ PICK YOUR SEAT WISELY</span>
+      Five classes, five styles. Captain delegates (easy). Pete fixes road hazards. Tiller Killer is fastest but has a 15-second timer on every question. Dave drives fast. Ray nails skills (hardest, highest ceiling).
+    </div>
+
+    <div class="center" style="margin-top:14px">
+      <button class="start-btn" onclick="titleScreen()">BACK TO TITLE</button>
+    </div>`);
+}
+
+/* ---- CLASS SELECT ---- */
+function selectScreen(){
+  setScreen('select');
+  let cards=Object.entries(CLASSES).map(([id,c])=>`
+    <button class="select-card" onclick="chooseClass('${id}')">
+      <span style="font-family:var(--body);font-size:24px;color:var(--amber);letter-spacing:1px">${c.name}</span><span class="tag">${c.role}</span><br>
+      <span class="small">aka ${c.aka}</span><br><span style="color:var(--ink)">${c.flavor}</span><br>
+      <span class="good">+ ${c.good[0]}</span><br><span class="good">+ ${c.good[1]}</span><br>
+      <span class="bad">\u2212 ${c.bad}</span><br>
+      <span class="small">Budget $${c.budget} &middot; Score \u00d7${c.mult}</span>
+    </button>`).join('');
+  render(`<h1 style="font-size:18px">CHOOSE YOUR SEAT</h1><div class="sub">more money = easier &middot; more skill = higher score</div>${cards}`);
+}
+function chooseClass(id){S=newState(id);storeScreen();}
+
+/* ---- STORE ---- */
+function storeScreen(){
+  setScreen('store');
+  let c=CLASSES[S.cls];
+  let items=STORE.map(it=>{
+    let owned = it.give.bvm||it.give.glucometer||it.give.batteries
+      ? (it.give.glucometer&&S.inv.glucometer)||(it.give.bvm&&S.inv.bvm)||(it.give.batteries&&S.inv.batteries)
+      : Object.keys(it.give).some(k=>S.inv[k]>0);
+    return `<div class="store-item"><span class="nm">${it.nm}</span><span class="pr">$${it.pr}</span>
+      <button onclick="buy('${it.id}')" ${S.budget<it.pr?'disabled':''}>BUY</button></div>`;
+  }).join('');
+  render(`<h1 style="font-size:14px">SUPPLY &amp; MAINTENANCE</h1><div class="sub">emergency restock \u00b7 ${c.name}</div>
+    <div class="hud"><span>DEFICIT ALLOCATION: <b>$${S.budget}</b></span></div>
+    ${suppliesStrip()}
+    <p class="small">The city's broke, so this is all they cut you \u2014 you can't restock everything. Buy what'll keep patients alive on the way home; the streets may cough up the rest.</p>
+    ${items}<hr>
+    <button onclick="confirmStart()" style="border-color:var(--amber);color:var(--amber)"><span class="key">\u25B6</span> ROLL FOR QUARTERS</button>`);
+}
+function buy(id){let it=STORE.find(x=>x.id===id); if(S.budget<it.pr)return; S.budget-=it.pr;
+  for(let k in it.give){ if(typeof it.give[k]==='number') S.inv[k]+=it.give[k]; else S.inv[k]=it.give[k]; } storeScreen();}
+
+function suppliesStrip(){
+  const map=[["OPA","opa"],["NPA","npa"],["LUBE","lube"],["NARC","naloxone"],["GLUC","glucose"],["STRP","strips"],["GLOVE","gloves"],["EPI","epi"]];
+  let counts=map.map(([lbl,k])=>`<span class="${S.inv[k]>0?'':'out'}">${lbl} <b>${S.inv[k]}</b></span>`).join('');
+  let dur=`<span class="${S.inv.glucometer?'':'out'}">METER ${S.inv.glucometer?'\u2713':'\u2717'}</span>
+           <span class="${S.inv.bvm?'':'out'}">BVM ${S.inv.bvm?'\u2713':'\u2717'}</span>`;
+  return `<div class="supplies">${counts}${dur}</div>`;
+}
+
+function confirmStart(){
+  setScreen('confirmStart');
+  let warn = !S.inv.gloves ? `<p class="bad">\u26A0 You skipped GLOVES. BSI, anyone? Bold.</p>`:"";
+  render(`<h1 style="font-size:14px">PULLING OUT OF S&amp;M</h1><div class="sub">${CLASSES[S.cls].name} \u00b7 long way to quarters</div>
+    ${suppliesStrip()}
+    <p>Restocked as best the budget allowed, you pull out of Supply &amp; Maintenance at 140 N Ave 19. Dispatch already has calls holding between you and the barn at quarters (430 E 7th St).</p>${warn}
+    <div class="rig" style="color:var(--amber-dim)">~ the radio crackles ~</div>
+    <div class="center"><button class="start-btn" onclick="chooseRouteScreen(false)">PICK YOUR ROUTE</button></div>`);
+}
+function chooseRouteScreen(ctx){
+  setScreen('route');
+  let isHospital = (ctx==='hospital');
+  let isMid = (ctx===true || ctx==='mid');
+  let head, sub;
+  if(isHospital){
+    head = "ROUTE BACK FROM HOSPITAL";
+    sub = `Hospital drop-off \u2192 quarters \u00b7 pick your way back (${Math.round(S.progress)}% home)`;
+  } else if(isMid){
+    head = "RE-PICK YOUR ROUTE";
+    sub = `Halfway home \u00b7 ${Math.round(S.progress)}% in \u00b7 you can change tactics`;
+  } else {
+    head = "CHOOSE YOUR ROUTE";
+    sub = `Lincoln Heights \u2192 quarters \u00b7 pick your way home`;
+  }
+  let cards = Object.entries(ROUTES).map(([id,r])=>`
+    <button class="select-card" onclick="chooseRoute('${id}')">
+      <span style="font-family:var(--body);font-size:24px;color:var(--amber);letter-spacing:1px">${r.name}</span><br>
+      <span class="small">${r.sub}</span><br>
+      <span style="color:var(--ink)">${r.desc}</span><br>
+      <span class="good">+ ${r.good[0]}</span><br>
+      <span class="good">+ ${r.good[1]}</span><br>
+      <span class="bad">\u2212 ${r.bad}</span>
+    </button>`).join('');
+  render(`<h1 style="font-size:16px">${head}</h1><div class="sub">${sub}</div>${cards}`);
+}
+function chooseRoute(id){
+  S.route = ROUTES[id];
+  if(S.routeChosen){ S.routeChanged = true; }
+  S.routeChosen = true;
+  nextStop();
+}
+/* Skid Row proximity \u2014 closer to quarters = more bad stuff */
+function skidRowMult(){
+  if(S.progress >= 75) return 1.6;
+  if(S.progress >= 55) return 1.35;
+  if(S.progress >= 35) return 1.15;
+  return 1.0;
+}
+function renderEmpty(e){
+  render(`${hud()}<h1 style="font-size:14px">\u2014 ON THE TRAIL \u2014</h1>
+    <div class="scene"><span class="who">\u25b8 ${e.who}</span>${e.title}: ${e.scene}</div>
+    <div class="center"><button class="start-btn" onclick="resolveEmpty()">KEEP ROLLING</button></div>`);
+}
+function resolveEmpty(){
+  /* empty stop = dispatch caught up; small heat recovery */
+  showResult({tone:'mid',text:"Miles go by. No patient, no fire, no static. Dispatch clears a holding call off your screen.",teach:null,sc:0,saved:null},
+    ()=>advance(),{prog:5,heat:-1});
+}
+/* OCCUPATIONAL EXPOSURE \u2014 Oregon-Trail-style "disease" event */
+function renderExposure(e){
+  S._evt=e;
+  render(`${hud()}<h1 style="font-size:14px;color:var(--amber)">\u26a0 OCCUPATIONAL EXPOSURE</h1>
+    <div class="scene"><span class="who">\u25b8 ${e.who}</span><b>${e.title}.</b> ${e.scene}</div>
+    <p class="center small bad">+${e.sickAdd} EXPOSED \u00b7 ${e.heatAdd?`+${e.heatAdd} HOLDING \u00b7 `:''}${e.sc} pts</p>
+    <div class="center"><button class="start-btn" onclick="resolveExposure()">DOCUMENT IT</button></div>`);
+}
+function resolveExposure(){
+  let e=S._evt;
+  S.exposed=(S.exposed||0)+(e.sickAdd||0);
+  S.expoLog.push(e.title);
+  showResult({tone:e.sickAdd>=2?'bad':'mid',
+    text:`You document the exposure, bag the gloves, and keep moving. The story you'll tell at the kitchen table tonight: "${e.title}."`,
+    teach:e.teach,sc:e.sc||0,saved:null},
+    ()=>advance(),{prog:0,heat:e.heatAdd||0});
+}
+function gradeMeta(tone,saved,kind){
+  if(kind==='scav') return {prog:5,heat:0};
+  if(kind==='road') return tone==='good'?{prog:8,heat:0}:{prog:2,heat:1};
+  if(tone==='good'&&saved===true) return {prog:22,heat:-1,isCall:true};
+  if(tone==='mid') return {prog:8,heat:1,isCall:true};
+  return {prog:2,heat:2,isCall:true};
+}
+function pickFrom(a){return a[Math.floor(Math.random()*a.length)];}
+
+/* ---- RUSH TIMER (Tiller Killer's "Drill First, Treat Second") ---- */
+let __rushInterval=null;
+function rushTimerHTML(){
+  return S && S.flags && S.flags.rushed
+    ? `<div id="rush-bar" class="rush-bar"><span class="lbl">⏱ DRILL OVERRUN — RUSH THE PATIENT</span><span id="rush-num" class="num">15s</span></div>`
+    : '';
+}
+function startRushTimer(onExpire){
+  if(!S || !S.flags || !S.flags.rushed) return;
+  stopRushTimer();
+  let deadline=Date.now()+15000;
+  function tick(){
+    let remain=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+    let num=document.getElementById('rush-num');
+    let bar=document.getElementById('rush-bar');
+    if(num) num.textContent=remain+'s';
+    if(bar){ if(remain<=5) bar.classList.add('warn'); else bar.classList.remove('warn'); }
+    if(remain<=0){ stopRushTimer(); onExpire(); }
+  }
+  tick();
+  __rushInterval=setInterval(tick,100);
+}
+function stopRushTimer(){
+  if(__rushInterval){ clearInterval(__rushInterval); __rushInterval=null; }
+}
+function worstIndex(opts, getOk){
+  let worstIdx=0, worstVal=Infinity;
+  opts.forEach((o,i)=>{
+    let v=getOk(o);
+    if(v<worstVal){ worstVal=v; worstIdx=i; }
+  });
+  return worstIdx;
+}
+function callOkVal(o){
+  if(o.ok==='bad') return -100;
+  if(o.ok==='mid') return 0;
+  if(o.ok==='good') return 100;
+  if(typeof o.ok==='number') return o.ok*100;
+  if(o.saved===true) return 50;
+  if(o.saved===false) return -50;
+  return (o.sc||0);
+}
+function rushTimeoutCall(){ if(!S._opts) return; pickCall(worstIndex(S._opts, callOkVal)); }
+function rushTimeoutDet(){ if(!S._detOpts) return; pickDet(worstIndex(S._detOpts, callOkVal)); }
+function rushTimeoutProc(){
+  let pr=S.proc; if(!pr) return;
+  pickProc(worstIndex(pr.stepOpts, o=>{
+    let v=(typeof o.ok==='function')?o.ok(pr.ctx):o.ok;
+    return typeof v==='number'?v:0;
+  }));
+}
+
+/* ---- HIDDEN SPEED TIMER (Ray's "Geological Scene Time") ----
+   Fast assessment (<15s) on a question → +1 ★ morale.
+   Slow deliberation (>25s) → -1 ★ morale.
+   Between 15-25s: no change. Hidden — only the cumulative morale change is shown. */
+function startQuestionTimer(){
+  if(S && S.flags && S.flags.sceneTime){ S._qStart = Date.now(); }
+}
+function applyHiddenSpeedTimer(){
+  if(!S || !S.flags || !S.flags.sceneTime || !S._qStart) return;
+  let elapsed = (Date.now() - S._qStart) / 1000;
+  S._qStart = null;
+  S._speedFlashes = S._speedFlashes || [];
+  if(elapsed < 15){
+    if(S.morale < 5){ S.morale = Math.min(5, S.morale + 1); S._speedFlashes.push('fast'); }
+  } else if(elapsed > 25){
+    if(S.morale > 0){ S.morale = Math.max(0, S.morale - 1); S._speedFlashes.push('slow'); }
+  }
+}
+
+/* ---- RIPPLE — every action has a downstream consequence ---- */
+function applyRipple(r, meta){
+  if(!meta || !meta.isCall) return '';
+  let tone=r.tone||'mid';
+  let pool, chance;
+  if(tone==='good' && r.saved===true){ pool=RIPPLES.good; chance=0.55; }
+  else if(tone==='bad'){ pool=RIPPLES.bad; chance=0.55; }
+  else if(tone==='mid'){ pool=Math.random()<0.5?RIPPLES.good:RIPPLES.bad; chance=0.3; }
+  else return '';
+  if(Math.random()>chance) return '';
+  let ripple=pool[Math.floor(Math.random()*pool.length)];
+  S.progress=Math.max(0,Math.min(100,S.progress+(ripple.prog||0)));
+  S.backlog=Math.max(0,S.backlog+(ripple.heat||0));
+  S.score+=(ripple.sc||0);
+  if(ripple.morale && S.flags.morale){
+    S.morale=Math.min(5,Math.max(0,S.morale+ripple.morale));
+  }
+  if(ripple.scav && S.inv){
+    let restock=['gloves','strips','glucose','lube'];
+    let item=restock[Math.floor(Math.random()*restock.length)];
+    S.inv[item]=(S.inv[item]||0)+1;
+    S.scavenged=(S.scavenged||0)+1;
+  }
+  if(ripple.inv && S.inv && S.inv[ripple.inv]>0){
+    S.inv[ripple.inv]=Math.max(0,S.inv[ripple.inv]+(ripple.invDelta||0));
+  }
+  let isGood=pool===RIPPLES.good;
+  let cls=isGood?'good':'bad';
+  let parts=[];
+  if(ripple.prog) parts.push(`${ripple.prog>0?'+':''}${ripple.prog}% home`);
+  if(ripple.heat) parts.push(`${ripple.heat>0?'+':''}${ripple.heat} holding`);
+  if(ripple.sc) parts.push(`${ripple.sc>0?'+':''}${ripple.sc} pts`);
+  let metaStr=parts.length?` (${parts.join(' · ')})`:'';
+  return `<p class="small ${cls}">▸ RIPPLE — ${ripple.title}: ${ripple.effect}${metaStr}</p>`;
+}
+function nextStop(){
+  /* hospital re-pick fires first — you just dropped off a patient at the hospital */
+  if(S._needsHospitalRoute){
+    S._needsHospitalRoute = false;
+    return chooseRouteScreen('hospital');
+  }
+  setScreen('game');
+  S.stopCount++;
+  /* mid-route re-pick once you cross 50% — change tactics if you want */
+  if(S.progress>=50 && !S.routeChanged && S.stopCount>3){
+    return chooseRouteScreen(true);
+  }
+  let skid = skidRowMult();
+  /* catastrophe (rare, escalates in Skid Row) */
+  if(S.stopCount>4 && !S.catFired && Math.random()<0.05*skid){ S.catFired=true; return renderCata(pickFrom(CATAS)); }
+  let m = (S.route&&S.route.mods) || {scav:1,road:1,crew:1,filth:1,barrier:1,empty:1};
+  /* probability bands — barriers & filth scale UP in Skid Row, scav scales DOWN */
+  let scavP    = 0.07 * m.scav / skid;
+  let roadP    = scavP + 0.08 * m.road;
+  let emptyP   = roadP + 0.04 * m.empty;
+  let crewP    = emptyP + 0.05 * m.crew;
+  let filthP   = crewP + 0.05 * m.filth * skid;
+  let barrierP = filthP + 0.05 * m.barrier * skid;
+  /* exposures scale hard with Skid Row proximity */
+  let expoP    = barrierP + 0.06 * (skid-0.6);
+  let r=Math.random();
+  if(S.stopCount>1){
+    if(r<scavP)    return renderScav(pickFrom(SCAVS));
+    if(r<roadP)    return renderRoad(pickFrom(ROADS));
+    if(r<emptyP)   return renderEmpty(pickFrom(EMPTY));
+    if(r<crewP)    return renderCrewCheck(pickFrom(CREWCHECKS));
+    if(r<filthP)   return renderFilth(pickFrom(FILTHS));
+    if(r<barrierP) return renderBarrier(pickFrom(BARRIERS));
+    if(r<expoP)    return renderExposure(pickFrom(EXPOSURES));
+  }
+  /* Call selection: bias to SKIDCALLS as Skid Row proximity increases.
+     Routes with high transport mod (Down Main) lean harder on SKIDCALLS (they're transport-heavy);
+     low-transport routes (Around the 5) pull SKIDCALLS less often. */
+  let callPool=CALLS;
+  let skidCallBias = skid>=1.6?0.7 : skid>=1.35?0.55 : skid>=1.15?0.30 : 0;
+  let txMod = (S.route && S.route.mods && S.route.mods.transport) || 1.0;
+  skidCallBias = Math.min(0.9, skidCallBias * txMod);
+  if(skidCallBias>0 && Math.random()<skidCallBias) callPool=SKIDCALLS;
+  let pool=callPool.filter(c=>!S.recent.includes(c.id));
+  let call=pickFrom(pool.length?pool:callPool);
+  S.recent.push(call.id); if(S.recent.length>3) S.recent.shift();
+  renderCall(call);
+}
+function advance(){
+  S.peakHeat=Math.max(S.peakHeat,S.backlog);
+  if(S.sick>0){ if(S.justStuck) S.justStuck=false; else { S.sick--; if(S.sick<=0) return sickFailScreen(); } }
+  if(S.progress>=100) return winScreen();
+  if(S.backlog>=HEAT_CAP) return failScreen();
+  nextStop();
+}
+function hud(){
+  let p=Math.min(100,Math.round(S.progress));
+  let hot=S.backlog>=HEAT_CAP-2;
+  let sickLine = S.sick>0 ? `<span style="color:var(--red)">BBP CLOCK <b style="color:var(--red)">${S.sick}</b></span>` : '';
+  let expLine = S.exposed>0 ? `<span style="color:var(--amber)">EXPOSED <b style="color:var(--amber)">${S.exposed}</b></span>` : '';
+  let moraleLine = '';
+  if(S.flags.morale){
+    let t = MORALE_TIERS[S.morale]||MORALE_TIERS[0];
+    moraleLine = `<span style="color:${t.color}">MORALE <b style="color:${t.color}">${'★'.repeat(S.morale)}${'☆'.repeat(5-S.morale)} ${t.label}</b></span>`;
+  }
+  let skid = skidRowMult();
+  let skidTag = skid>=1.6 ? `<span style="color:var(--red)">SKID ROW CORE</span>`
+              : skid>=1.35 ? `<span style="color:var(--amber)">NEAR QUARTERS</span>`
+              : skid>=1.15 ? `<span style="color:var(--amber-dim)">APPROACHING</span>` : '';
+  let routeTag = S.route ? `<span>ROUTE <b>${S.route.name}</b></span>` : '';
+  return `<div style="text-align:center;font-family:var(--body);font-size:18px;color:var(--amber);margin-bottom:4px;letter-spacing:2px">DISTANCE TO QUARTERS</div>
+    <div class="barwrap"><div class="bar" style="width:${p}%"></div></div>
+    <div class="hud">
+      <span>HOME <b>${p}%</b></span>
+      <span style="${hot?'color:var(--red)':''}">HOLDING <b style="${hot?'color:var(--red)':''}">${S.backlog}/${HEAT_CAP}</b></span>
+      ${sickLine}
+      ${expLine}
+      ${moraleLine}
+      <span>SAVED <b>${S.saved}</b></span>
+      <span style="${S.lost?'color:var(--red)':''}">LOST <b style="${S.lost?'color:var(--red)':''}">${S.lost}</b></span>
+      <span>SCORE <b>${S.score}</b></span>
+      ${routeTag}
+      ${skidTag}</div>
+    ${suppliesStrip()}`;
+}
+
+/* ---- CALL ---- */
+function activeOptions(call){
+  if(S.cls==='captain'){
+    if(call.crewCan) return captainDelegate(call);
+    if(call.captainSolo) return call.captainSolo;
+  }
+  return call.options;
+}
+function captainDelegate(call){
+  let d=!!call.det;
+  /* If the underlying call requires transport (and no det will handle it),
+     delegating doesn't change physics \u2014 the rig still has to drive to the hospital. */
+  let tx = !d && (call.options||[]).some(o=>o.transport===true);
+  return [
+    {l:"Direct your crew through it \u2014 run the scene, keep them moving.",key:"A",ok:'good',sc:11,saved:d?null:true,det:d,transport:tx,
+      text:`You call it clean \u2014 \u201C${call.direct}\u201D \u2014 and your crew executes while you run the scene and the radio. Morale's high; they move fast for you. This is the captain's actual job.`,
+      teach:"A captain's real hands-on tool is leadership: direct trained people, manage the scene. (+scene command, +morale \u2014 the crew works hard for you.)"},
+    {l:"Elbow your medic aside and do it yourself.",key:"B",ok:'mid',sc:-4,saved:d?null:true,det:d,transport:tx,
+      text:"You muscle in and it sort of works \u2014 but you're rusty, you slow the scene, and the crew trades a look. You didn't need to take the wheel.",
+      teach:"Micromanaging a trained crew burns morale and puts rusty hands where sharp ones already were. Delegate the task; own the scene."},
+    {l:"Stand back and let the scene sort itself out.",key:"C",ok:'bad',sc:-12,saved:false,
+      text:"You hang back with no direction. Medics duplicate each other, nobody owns the airway, the call drifts. Command isn't standing quietly.",
+      teach:"Command means clear direction and assignments. A leaderless scene drifts \u2014 absence isn't delegation."}
+  ];
+}
+function renderCall(call){
+  S.current=call;
+  S._opts=shuffle(activeOptions(call));
+  let demo=makeDemo(call);
+  S._demo=demo;
+  let scene = applyTokens(pickFrom(call.sceneVars||[call.scene]), demo);
+  let who = pickFrom(call.whoVars||[call.who]);
+  let solo = call.soloScene ? applyTokens(pickFrom(call.soloSceneVars||[call.soloScene]), demo) : '';
+  let extra=(S.cls==='captain'&&!call.crewCan&&solo)?`<br><br><span class="mid">\u2014 ${solo}</span>`:'';
+  let tag=(S.cls==='captain')
+    ?(call.crewCan?`<div class="proc-tag">\u{1F451} CAPTAIN \u2014 your crew's got hands on; run the scene</div>`
+                  :`<div class="proc-tag">\u{1F451} CAPTAIN \u2014 crew's tied up; this one's on you</div>`):'';
+  let btns=S._opts.map((o,i)=>`<button onclick="pickCall(${i})"><span class="key">${letterOf(i)}</span>${o.l}</button>`).join('');
+  render(`${hud()}<h1 style="font-size:14px">CALL \u2014 ${call.title}</h1>
+    ${tag}
+    <div class="scene"><span class="who">\u25B8 ${who}</span>${scene}${extra}</div>
+    <p style="color:var(--amber)">${pickFrom(call.qVars||[call.q])}</p>${rushTimerHTML()}${btns}`);
+  startRushTimer(rushTimeoutCall);
+  startQuestionTimer();
+}
+function classMod(call,opt,base){
+  let sc=base, note="";
+  if(opt.skill && S.flags.byBook){ sc+=3; note=" Calm hands, by the book \u2014 the attendant makes it look easy. (+3)"; }
+  if(opt.skill&&(opt.skill==='opa'||opt.skill==='npa')&&S.flags.airwayRusty){ sc-=2; note=" The captain's a touch rusty on hands-on airways, but it counts. (\u22122)"; }
+  if(call.decision && S.flags.command){ sc+=3; note=" Scene command instinct kicks in. (+3)"; }
+  if(call.timeCritical && S.flags.fast){ sc+=3; note=" Lead Foot got you there with time to spare. (+3)"; }
+  return {sc,note};
+}
+function pickCall(i){
+  stopRushTimer();
+  applyHiddenSpeedTimer();
+  let call=S.current, opt=S._opts[i];
+  if(opt.skill!==undefined){
+    let met = (opt.needs||[]).every(k=> (COUNTS.includes(k)? S.inv[k]>0 : S.inv[k]===true));
+    if(!met){
+      let saved=(opt.noSupplySaved!==undefined?opt.noSupplySaved:false);
+      let tone=saved===false?'bad':'mid';
+      showResult({tone:tone,text:opt.noSupplyText,teach:opt.noSupplyTeach||opt.teach,sc:opt.noSupplySc||-4,saved:saved},
+        ()=>advance(), gradeMeta(tone,saved));
+      return;
+    }
+    runProcedure(opt.skill, ()=> finalizeCall(call,opt), opt.procCtx||{});
+  } else finalizeCall(call,opt);
+}
+function finalizeCall(call,opt){
+  (opt.consume||[]).forEach(k=>{ if(S.inv[k]>0) S.inv[k]--; });
+  let m=classMod(call,opt,opt.sc||0);
+  let tone=(opt.skill!==undefined?'good':(opt.ok==='good'?'good':opt.ok==='mid'?'mid':'bad'));
+  let toDet = (opt.det && call.det);
+  let meta = toDet?null:gradeMeta(tone,opt.saved);
+  if(meta && opt.skill && S.flags.sceneTime) meta.attendantTax=true;
+  showResult({tone:tone, text:opt.text + (m.note?("\n"+m.note):""), teach:opt.teach, sc:m.sc, saved:opt.saved, transport:opt.transport, skillUsed:(opt.skill!==undefined)},
+    ()=>{ if(toDet) renderDet(call.det); else advance(); },
+    meta);
+}
+function renderDet(det){
+  S._det=det;
+  S._detOpts=shuffle(det.options);
+  let opts=S._detOpts.map((o,i)=>`<button onclick="pickDet(${i})"><span class="key">${letterOf(i)}</span>${o.l}</button>`).join('');
+  let detScene=applyTokens(pickFrom(det.sceneVars||[det.scene]), S._demo||{age:''});
+  let detQ=pickFrom(det.qVars||[det.q]);
+  render(`${hud()}<div class="proc-tag">\u26A1 PATIENT'S CONDITION IS CHANGING</div>
+    <div class="scene"><span class="who">\u25B8 ${det.who}</span>${detScene}</div>
+    <p style="color:var(--amber)">${detQ}</p>${rushTimerHTML()}${opts}`);
+  startRushTimer(rushTimeoutDet);
+  startQuestionTimer();
+}
+function pickDet(i){
+  stopRushTimer();
+  applyHiddenSpeedTimer();
+  let o=S._detOpts[i];
+  let tone=o.ok==='good'?'good':o.ok==='mid'?'mid':'bad';
+  showResult({tone:tone,text:o.text,teach:o.teach,sc:o.sc,saved:o.saved,transport:o.transport},
+    ()=>advance(), gradeMeta(tone,o.saved));
+}
+
+/* ---- PROCEDURE RUNNER ---- */
+function runProcedure(skill,onDone,ctx){
+  let c=ctx||{};
+  if(skill==='glucometer'){
+    c.bgl = (c.bglType==='high') ? (450+Math.floor(Math.random()*200)) : (32+Math.floor(Math.random()*26));
+  }
+  let steps = PROC[skill].steps.slice();
+  if(S.cls==='attendant' && PROC[skill].rayExtra) steps = steps.concat(PROC[skill].rayExtra);
+  S.proc={p:{name:PROC[skill].name,steps},i:0,onDone,fb:null,ctx:c,stepOpts:null,stepI:-1};
+  renderProc();
+}
+function renderProc(){
+  let pr=S.proc, step=pr.p.steps[pr.i];
+  if(pr.stepI!==pr.i){ pr.stepOpts = shuffle(step.o); pr.stepI = pr.i; }
+  let banner = pr.fb? `<div class="banner ${pr.fb.ok? '' : (pr.fb.ok===null?'b-mid':'b-bad')}">
+      <span class="${pr.fb.ok?'good':(pr.fb.ok===null?'mid':'bad')}">${pr.fb.ok?'\u2714 ':(pr.fb.ok===null?'\u2248 ':'\u2716 ')}${pr.fb.msg}</span></div>`:'';
+  let q = pickFrom(step.qV||[step.q]).replace(/\{\{bgl\}\}/g, pr.ctx.bgl!==undefined?pr.ctx.bgl:'');
+  let opts=pr.stepOpts.map((o,i)=>`<button onclick="pickProc(${i})">${letterOf(i)}. ${o.l}</button>`).join('');
+  render(`${hud()}<div class="proc-tag">\u{1F527} ${pr.p.name} \u2014 STEP ${pr.i+1}/${pr.p.steps.length}</div>
+    ${banner}
+    ${(pr.fb&&pr.lastTeach)?`<div class="teach"><span class="lbl">\u{1F4CB} TEACHING POINT</span>${pr.lastTeach}</div>`:''}
+    <p style="color:var(--amber)">${q}</p>${rushTimerHTML()}${opts}`);
+  startRushTimer(rushTimeoutProc);
+  startQuestionTimer();
+}
+function pickProc(i){
+  stopRushTimer();
+  applyHiddenSpeedTimer();
+  let pr=S.proc, step=pr.p.steps[pr.i], o=pr.stepOpts[i];
+  let okRaw = (typeof o.ok==='function') ? o.ok(pr.ctx) : o.ok;
+  let gain = okRaw===1?5 : okRaw===.5?1 : -3;
+  S.score+=gain;
+  pr.fb={ ok:(okRaw===1?true:okRaw===.5?null:false), msg:(okRaw===1?'Correct.':okRaw===.5?'Workable, but not ideal.':'Not quite \u2014 keep going.') };
+  pr.lastTeach=step.teach;
+  pr.i++;
+  if(pr.i<pr.p.steps.length) renderProc();
+  else { let done=pr.onDone; S.proc=null; renderProcDone(pr,done); }
+}
+function renderProcDone(pr,done){
+  // show final step feedback briefly then continue to call outcome
+  render(`${hud()}<div class="proc-tag">\u{1F527} ${pr.p.name} \u2014 COMPLETE</div>
+    <div class="banner ${pr.fb.ok?'':(pr.fb.ok===null?'b-mid':'b-bad')}">
+      <span class="${pr.fb.ok?'good':(pr.fb.ok===null?'mid':'bad')}">${pr.fb.ok?'\u2714 ':(pr.fb.ok===null?'\u2248 ':'\u2716 ')}${pr.fb.msg}</span></div>
+    <div class="teach"><span class="lbl">\u{1F4CB} TEACHING POINT</span>${pr.lastTeach}</div>
+    <div class="center"><button class="start-btn" onclick="window.__cont()">RESULT</button></div>`);
+  window.__cont=done;
+}
+
+/* ---- ROAD ---- */
+function renderRoad(r){
+  render(`${hud()}<h1 style="font-size:14px">\u2014 ON THE TRAIL \u2014</h1>
+    <div class="scene"><span class="who">\u25B8 ${r.who}</span>${r.title}: ${r.scene}</div>
+    <div class="center"><button class="start-btn" onclick="resolveRoadStop()">DEAL WITH IT</button></div>`);
+}
+function resolveRoadStop(){ let o=resolveRoad(); showResult({tone:o.tone,text:o.text,teach:o.teach,sc:o.sc,saved:null},()=>advance(),gradeMeta(o.tone,null,'road')); }
+
+/* ---- SCAVENGE ---- */
+function renderScav(s){
+  S._scav=s;
+  render(`${hud()}<h1 style="font-size:14px">\u2014 STREET FIND \u2014</h1>
+    <div class="scene"><span class="who">\u25B8 ${s.who}</span><b>${s.title}.</b> ${s.scene}</div>
+    <button onclick="takeScav(true)"><span class="key">\u271A</span> TAKE IT</button>
+    <button onclick="takeScav(false)"><span class="key">\u2715</span> LEAVE IT</button>`);
+}
+function takeScav(take){
+  let s=S._scav;
+  if(take){ if(s.qty===true) S.inv[s.item]=true; else S.inv[s.item]+=s.qty; S.scavenged=(S.scavenged||0)+1; }
+  showResult({tone:take?'good':'mid',text:take?s.take:s.leave,teach:s.teach,sc:0,saved:null},()=>advance(),gradeMeta('','','scav'));
+}
+
+/* ---- RESULT SHELL ---- */
+function showResult(r,onContinue,meta){
+  /* HALF-ASS ASSESSMENT — Diesel Bolus Dave: workup is bad, but the reflex transport saves them */
+  let daveSaved=false;
+  if(S && S.flags && S.flags.halfAss && r.saved===false && meta && meta.isCall){
+    r.saved=null; daveSaved=true;
+  }
+  if(r.sc) S.score+=r.sc;
+  if(r.saved===true) S.saved++; else if(r.saved===false) S.lost++;
+  let feed='';
+  if(daveSaved){
+    feed += `<p class="small mid">▸ DAVE TRANSPORTS ANYWAY: missed half the workup, but the ED caught it. Patient survives.</p>`;
+  }
+  if(S && S.flags && S.flags.halfAss && meta && meta.isCall){
+    S.score -= 3;
+    feed += `<p class="small bad">▸ HALF-ASS ASSESSMENT: −3 pts — you skipped the secondary, again.</p>`;
+  }
+  if(meta){
+    S.progress=Math.max(0,S.progress+meta.prog);
+    S.backlog=Math.max(0,S.backlog+meta.heat);
+    if(meta.heat<0) feed=`<p class="small good">\u25B8 Scene clear \u2014 you roll toward quarters. (+${meta.prog}% home)</p>`;
+    else if(meta.heat>0) feed=`<p class="small bad">\u25B8 DISPATCH: you're tied up \u2014 ${meta.heat} more call${meta.heat>1?'s':''} drop on your screen.</p>`;
+    else if(meta.prog>0) feed=`<p class="small mid">\u25B8 Back on the road. (+${meta.prog}% home)</p>`;
+    /* MORALE GAIN/LOSS triggers \u2014 easily lost (bad = -2), slower to climb (good = +1) */
+    if(S.flags.morale){
+      let oldM = S.morale;
+      /* Captain "Mood On The Engine": clean save \u2192 +1, bad call \u2192 \u22122 */
+      if(S.flags.command){
+        if(r.tone==='good' && r.saved===true){
+          S.morale = Math.min(5, S.morale + 1);
+        } else if(r.tone==='bad'){
+          S.morale = Math.max(0, S.morale - 2);
+        }
+      }
+      /* Ray "Geological Scene Time": skills cost morale, snap-clears rebuild */
+      if(S.flags.sceneTime && meta && meta.isCall){
+        if(r.skillUsed){
+          S.morale = Math.max(0, S.morale - 1);
+        } else if(r.tone==='good' && r.saved===true){
+          S.morale = Math.min(5, S.morale + 1);
+        } else if(r.tone==='bad'){
+          S.morale = Math.max(0, S.morale - 2);
+        }
+      }
+      /* Announce morale change with the new tier label */
+      if(S.morale !== oldM){
+        let t = MORALE_TIERS[S.morale]||MORALE_TIERS[0];
+        let delta = S.morale - oldM;
+        let cls = delta > 0 ? 'good' : 'bad';
+        let arrow = delta > 0 ? `+${delta} \u2605` : `${delta} \u2605`;
+        feed += `<p class="small ${cls}">\u25B8 MORALE ${arrow} \u2192 ${'\u2605'.repeat(S.morale)}${'\u2606'.repeat(5-S.morale)} <b style="color:${t.color}">${t.label}</b> \u2014 ${t.desc}</p>`;
+      }
+      /* Apply tier effects per stop (universal \u2014 both Captain and Ray) */
+      let t2 = MORALE_TIERS[S.morale]||MORALE_TIERS[0];
+      if(t2.progPerStop && meta.prog > 0){ S.progress = Math.min(100, S.progress + t2.progPerStop); }
+      if(meta.isCall){
+        if(t2.scorePerCall){ S.score += t2.scorePerCall; }
+        if(t2.heatPerCall){ S.backlog += t2.heatPerCall; }
+      }
+      /* Ray's hidden speed timer summary (fires after the morale tier block so changes already applied) */
+      if(S._speedFlashes && S._speedFlashes.length){
+        let fast=S._speedFlashes.filter(f=>f==='fast').length;
+        let slow=S._speedFlashes.filter(f=>f==='slow').length;
+        if(fast) feed += `<p class="small good">\u25b8 EFFICIENT ASSESSMENT: crew respects the pace. (+${fast} \u2605 morale from fast answers)</p>`;
+        if(slow) feed += `<p class="small bad">\u25b8 DELIBERATION: long pauses cost the crew their patience. (\u2212${slow} \u2605 morale from slow answers)</p>`;
+        S._speedFlashes = [];
+      }
+    }
+    /* SHORT DIST \u2014 Tiller Killer's "Knows Every Alley" perk */
+    if(S.flags.shortDist && meta.prog > 0){
+      S.progress = Math.min(100, S.progress + 3);
+    }
+    if(meta.attendantTax){ S.backlog++; feed+=`<p class="small mid">\u25B8 Ray's thoroughness ate scene time. (+1 holding)</p>`; }
+    feed += applyRipple(r, meta);
+    if(r.transport && r.saved===true){
+      if(S.flags.fast){
+        feed+=`<p class="small good">\u25B8 LEAD FOOT: you transported to the hospital and were back on your beat before the gurney cooled \u2014 no distance lost.</p>`;
+      } else {
+        let lost=Math.min(30,S.progress);
+        S.progress=Math.max(0,S.progress-30);
+        feed+=`<p class="small bad">\u25B8 TRANSPORT REQUIRED: you drove the patient to the hospital (\u2212${lost}% home). You'll re-pick a route from there.</p>`;
+        S._needsHospitalRoute = true;
+      }
+    }
+  }
+  let cls=r.tone==='good'?'good':r.tone==='bad'?'bad':'mid';
+  let head=r.tone==='good'?'\u2714 GOOD CALL':r.tone==='bad'?'\u2716 THAT WENT BADLY':'\u2248 COULD\u2019VE BEEN CLEANER';
+  let teach=r.teach?`<div class="teach"><span class="lbl">\u{1F4CB} TEACHING POINT</span>${r.teach}</div>`:'';
+  let scLine=(r.sc)?`<p class="small">${r.sc>0?'+':''}${r.sc} pts</p>`:'';
+  window.__cont=onContinue;
+  render(`${hud()}<h1 style="font-size:13px" class="${cls}">${head}</h1>
+    <p class="${cls}" style="white-space:pre-line">${r.text}</p>${scLine}${feed}${teach}
+    <div class="center"><button class="start-btn" onclick="window.__cont()">CONTINUE</button></div>`);
+}
+
+/* ---- WIN / FAIL ---- */
+function winScreen(){
+  setScreen('end');
+  let c=CLASSES[S.cls];
+  /* ----- SHIFT-REPORT SCORING (Oregon-Trail-style breakdown) ----- */
+  let decisions = S.score;                                       // running total from call + skill choices
+  let patients  = S.saved*25 - S.lost*30;                        // saved +25 each, lost -30 each
+  let speed     = Math.max(0,(16-S.stopCount))*4;                // fewer stops = bigger bonus
+  let composure = Math.max(0,(HEAT_CAP-S.peakHeat))*3;           // never got buried = bonus
+  let cash      = S.budget;                                      // every $ left = +1 pt (OT remaining-cash)
+  let supplyCt  = COUNTS.reduce((n,k)=>n+(S.inv[k]||0),0);       // leftover consumables
+  let supplyEq  = BOOLS.reduce((n,k)=>n+(S.inv[k]?1:0),0);       // leftover equipment
+  let supplies  = supplyCt*4 + supplyEq*12;
+  let scav      = (S.scavenged||0)*5;                            // hunting equivalent
+  let expoPenalty = (S.exposed||0)*4;                            // occupational exposures
+  let subtotal  = decisions + patients + speed + composure + cash + supplies + scav - expoPenalty;
+  let final     = Math.round(subtotal * c.mult);
+  let title,blurb;
+  if(S.lost===0 && S.peakHeat<=3 && (S.exposed||0)===0){title="CHIEF'S PET";blurb="Made it home clean, fast, lost nobody, came back un-exposed. The probies hate you. Keep it up.";}
+  else if(S.lost===0 && (S.exposed||0)<=2){title="SALTY VETERAN";blurb="It got hairy, but everyone made it and so did you. You've seen some things \u2014 and brought a few home.";}
+  else if(S.lost<=2){title="SOLID EMT";blurb="A couple rough ones on the way back, but you got the rig to the barn. You'll do.";}
+  else{title="PROBIE";blurb="You limped home over a pile of bad calls. Report to the captain's office, bring the protocol book.";}
+  let expoBlock = (S.exposed||0)>0 ? `
+    <div class="teach" style="text-align:left;border-color:var(--amber)"><span class="lbl">\u{1F9EA} WHAT YOU TOOK HOME</span>
+      <span style="color:var(--amber);font-size:18px">${S.expoLog.join(' \u00b7 ')}</span><br><br>
+      <span class="small">Total exposures: ${S.exposed} \u2014 score penalty -${expoPenalty}. Decon, shower, document, follow up at occ-health.</span></div>` : '';
+  render(`<h1 style="font-size:16px">BACK AT QUARTERS</h1><div class="sub">${c.name} made it to quarters</div>
+    <div class="rig" style="color:var(--green-dim)">     ___________________
+    |    Q U A R T E R S    |
+    |  [=]   [=]   [=]      |
+    '-----------------------'</div>
+    <div class="hud" style="font-size:11px"><span>STOPS <b>${S.stopCount}</b></span><span>SAVED <b>${S.saved}</b></span>
+      <span style="${S.lost?'color:var(--red)':''}">LOST <b style="${S.lost?'color:var(--red)':''}">${S.lost}</b></span><span>PEAK HOLD <b>${S.peakHeat}</b></span>
+      ${(S.exposed||0)>0?`<span style="color:var(--amber)">EXPOSED <b style="color:var(--amber)">${S.exposed}</b></span>`:''}</div>
+    <div style="border:2px solid var(--amber-dim);background:#1c1710;padding:14px 16px;margin:14px 0">
+      <div style="text-align:center;color:var(--amber);letter-spacing:2px;margin-bottom:8px;font-size:20px">\u2014 SHIFT REPORT \u2014</div>
+      ${[
+        ['Decision points (calls + skills)', decisions, ''],
+        ['Patient outcomes ('+S.saved+' saved \u00b7 '+S.lost+' lost)', patients, ''],
+        ['Speed home ('+Math.max(0,16-S.stopCount)+' stops under cap)', speed, ''],
+        ['Composure (peak hold '+S.peakHeat+'/'+HEAT_CAP+')', composure, ''],
+        ['Leftover budget ($'+S.budget+')', cash, ''],
+        ['Leftover supplies ('+supplyCt+' units \u00b7 '+supplyEq+' equip)', supplies, ''],
+        ['Scavenger finds ('+(S.scavenged||0)+')', scav, ''],
+        ...((S.exposed||0)>0 ? [['Occupational exposures ('+S.exposed+')', -expoPenalty, '']] : [])
+      ].map(([lbl,val])=>{
+        let col=val>0?'var(--green)':val<0?'var(--red)':'var(--green-dim)';
+        let sign=val>=0?'+':'';
+        return `<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted var(--green-deep)"><span style="color:var(--ink)">${lbl}</span><span style="color:${col}">${sign}${val}</span></div>`;
+      }).join('')}
+      <div style="display:flex;justify-content:space-between;padding:8px 0 4px;border-top:1px dashed var(--amber-dim);margin-top:6px;color:var(--amber)">
+        <span>SUBTOTAL</span><span>${subtotal}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:2px 0;color:var(--amber)">
+        <span>${c.name} class multiplier</span><span>\u00d7${c.mult}</span></div>
+    </div>
+    <h1 style="font-size:32px;color:var(--amber);margin:10px 0">${final}</h1>
+    <div class="teach" style="text-align:center"><span class="lbl">\u{1F396} YOUR RANK</span>
+      <span style="font-family:var(--pixel);font-size:16px;color:var(--green);line-height:1.6">${title}</span><br><br><span style="color:var(--amber)">${blurb}</span></div>
+    ${expoBlock}
+    <div class="center"><button class="start-btn" onclick="titleScreen()">RUN IT BACK</button></div>
+    <p class="center small" style="margin-top:14px">Different seat, different roll \u2014 the deficit, the calls, the streets, and what you brought home shuffle every run.</p>`);
+}
+function failScreen(){
+  setScreen('end');
+  render(`<h1 style="font-size:16px" class="bad">SWALLOWED BY THE SHIFT</h1><div class="sub">you never made it back</div>
+    <div class="rig" style="color:var(--red)">  CALLS HOLDING: ${S.backlog}
+  [!][!][!][!][!][!][!]
+   units stacked... no exit</div>
+    <p class="center bad">The holding calls piled up faster than you could clear them. Units are everywhere, patients keep coming, and the rig never sees the barn. The street won.</p>
+    <div class="hud" style="font-size:11px"><span>STOPS <b>${S.stopCount}</b></span><span>SAVED <b>${S.saved}</b></span>
+      <span style="color:var(--red)">LOST <b style="color:var(--red)">${S.lost}</b></span><span>GOT <b>${Math.round(S.progress)}%</b> home</span></div>
+    <div class="teach" style="text-align:center"><span class="lbl">\u{1F4CB} TAKEAWAY</span>
+      <span style="color:var(--amber)">Mistakes compound. Each botched call ties you up and stacks another patient \u2014 the way out isn't speed, it's clean calls. Restock smarter and run the basics right.</span></div>
+    <div class="center"><button class="start-btn" onclick="titleScreen()">START OVER</button></div>`);
+}
+
+/* ---- CREW CHECK / FILTH / BARRIER / CATA ---- */
+function renderCrewCheck(cc){
+  S._evt=cc;
+  let isCpt=S.cls==='captain';
+  render(`${hud()}<h1 style="font-size:14px">CREW CHECK</h1>
+    ${isCpt?`<div class="proc-tag">\u{1F451} CAPTAIN \u2014 you see what's about to happen</div>`:''}
+    <div class="scene"><span class="who">\u25B8 ON SCENE</span>${cc.scene}</div>
+    <div class="center"><button class="start-btn" onclick="resolveCrewCheck()">${isCpt?'STEP IN':'WATCH IT UNFOLD'}</button></div>`);
+}
+function resolveCrewCheck(){
+  let cc=S._evt;
+  if(S.cls==='captain'){
+    showResult({tone:'good',text:cc.correction,teach:cc.teach,sc:8,saved:null},()=>advance(),{prog:8,heat:-1});
+  } else {
+    showResult({tone:'bad',text:cc.error,teach:cc.teach,sc:-7,saved:null},()=>advance(),{prog:0,heat:2});
+  }
+}
+function renderFilth(f){
+  S._evt=f;
+  let has=S.cls==='engineer';
+  render(`${hud()}<h1 style="font-size:14px">CONTAMINATION</h1>
+    ${has?`<div class="proc-tag">\u{1F527} ENGINEER \u2014 you've got tank water</div>`:''}
+    <div class="scene"><span class="who">\u25B8 ON SCENE</span><b>${f.title}.</b> ${f.scene}</div>
+    <div class="center"><button class="start-btn" onclick="resolveFilth()">${has?'HOSE IT DOWN':'DEAL WITH IT'}</button></div>`);
+}
+function resolveFilth(){
+  let f=S._evt, has=S.cls==='engineer';
+  if(has){
+    showResult({tone:'good',text:f.fixText,teach:f.teach,sc:6,saved:null},()=>advance(),{prog:6,heat:-1});
+  } else {
+    showResult({tone:'bad',text:f.noFixText,teach:f.teach,sc:-5,saved:null},()=>advance(),{prog:0,heat:1});
+  }
+}
+function renderBarrier(b){
+  S._evt=b;
+  let has=S.cls==='ao';
+  render(`${hud()}<h1 style="font-size:14px">LOCKED ACCESS</h1>
+    ${has?`<div class="proc-tag">\u{1FA9C} APPARATUS OP \u2014 forcible entry is your job</div>`:''}
+    <div class="scene"><span class="who">\u25B8 ON SCENE</span><b>${b.title}.</b> ${b.scene}</div>
+    <div class="center"><button class="start-btn" onclick="resolveBarrier()">${has?'POP IT OPEN':'WAIT ON THE TRUCK'}</button></div>`);
+}
+function resolveBarrier(){
+  let b=S._evt, has=S.cls==='ao';
+  if(has){
+    showResult({tone:'good',text:b.feText,teach:b.teach,sc:9,saved:null},()=>advance(),{prog:9,heat:-1});
+  } else {
+    showResult({tone:'bad',text:b.noFeText,teach:b.teach,sc:-8,saved:false},()=>advance(),{prog:0,heat:2});
+  }
+}
+function renderCata(c){
+  S._evt=c;
+  let head=c.kind==='steal'?'\u26A0 RIG BORROWED \u26A0':'\u26A0 SHARPS \u26A0';
+  render(`${hud()}<h1 style="font-size:14px;color:var(--red)">${head}</h1>
+    <div class="scene"><span class="who">\u25B8 SUDDEN</span><b>${c.title}.</b> ${c.scene}</div>
+    <div class="center"><button class="start-btn" onclick="resolveCata()">PROCEED</button></div>`);
+}
+function resolveCata(){
+  let c=S._evt;
+  if(c.kind==='steal'){
+    S.progress=0;
+    showResult({tone:'bad',text:"You walk the long way back to S&M to grab another rig. Everything you built on this trip \u2014 gone. Distance to quarters: 0%.",teach:"Lock the rig. Always. The Skid Row rig-theft genre has plot twists nobody enjoys.",sc:-5,saved:null},()=>advance());
+  } else {
+    S.sick=6; S.justStuck=true;
+    showResult({tone:'bad',text:"You document the exposure and keep working \u2014 but you've got a clock now. Make quarters in time and the ED has you covered. Stall, and you're the next patient.",teach:"Needle sticks happen on Skid Row. Post-exposure prophylaxis exists, but the clock starts the second of contact \u2014 sooner is better.",sc:-3,saved:null},()=>advance());
+  }
+}
+function sickFailScreen(){
+  setScreen('end');
+  render(`<h1 style="font-size:16px" class="bad">DOWN ON THE TRAIL</h1><div class="sub">you didn't make it back in time</div>
+    <div class="rig" style="color:var(--red)">    ___________________
+    |   E D   T R I A G E   |
+    |   too late...         |
+    '-----------------------'</div>
+    <p class="center bad">The exposure caught up before quarters did. You went from EMT to patient on the same shift.</p>
+    <div class="hud" style="font-size:11px"><span>STOPS <b>${S.stopCount}</b></span><span>GOT <b>${Math.round(S.progress)}%</b> home</span></div>
+    <div class="teach" style="text-align:center"><span class="lbl">\u{1F4CB} TAKEAWAY</span>
+      <span style="color:var(--amber)">Treat every sharps and bodily-fluid exposure like a clock. Skid Row's needles don't care about your shift.</span></div>
+    <div class="center"><button class="start-btn" onclick="titleScreen()">START OVER</button></div>`);
+}
+
+bootScreen();
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+</script>
+</body>
+</html>

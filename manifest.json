@@ -1,0 +1,17 @@
+{
+  "name": "The San Julian St Trail",
+  "short_name": "SJT",
+  "description": "A Skid Row EMS training expedition. Pick your seat, outfit the rig on a deficit budget, and make it back to quarters.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070b07",
+  "theme_color": "#070b07",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon.svg",     "sizes": "any",     "type": "image/svg+xml" }
+  ]
+}
